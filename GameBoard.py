@@ -59,7 +59,7 @@ class GameBoard(tk.Frame):
     def placePiece(self, name, row, col):
         self.pieces[name] = (row, col)
         x0 = (col * self.sqrSize) + int(self.sqrSize / 2)
-        y0 = ((7 - row) * self.sqrSize) + int(self.sqrSize / 2)
+        y0 = (row * self.sqrSize) + int(self.sqrSize / 2)
         self.board.coords(name, x0, y0)
 
     def initPieces(self, player, photo):
@@ -98,10 +98,14 @@ def callback(event):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    #photo = tk.PhotoImage(file="download.png")
-    #photo = photo.zoom(25)
-    #photo = photo.subsample(100)
+    root.resizable(width=True, height=True)
+    root.minsize(width=666, height=666)
+    photo = tk.PhotoImage(file="red.png")
+    photo = photo.zoom(25)
+    photo = photo.subsample(100)
     board = GameBoard(root)
+
+    board.createPiece("1", photo, 0, 0)
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     root.mainloop()
