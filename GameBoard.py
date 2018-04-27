@@ -76,6 +76,7 @@ class GameBoard(tk.Frame):
 
 def callback(event):
     print("clicked at", event.x, event.y)
+    return(event.x, event.y)
 
 
 if __name__ == "__main__":
