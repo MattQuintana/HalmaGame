@@ -13,6 +13,9 @@ class Board:
                 row.append(0)
             self.board.append(row)
 
+    def get_board(self):
+        return self.board
+
     def initRedPieces(self, size):
         for i in range(0, size):
             for j in range(0, size-i):
