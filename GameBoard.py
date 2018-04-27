@@ -20,6 +20,8 @@ class GameBoard(tk.Frame):
         self.board = tk.Canvas(self, borderwidth=2, highlightthickness=0,
                                 width=boardWidth, height=boardHeight, background="bisque")
 
+        self.board.bind("<Button-1>", callback)
+
         self.board.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
         self.board.bind("<Configure>", self.refresh)
@@ -71,6 +73,9 @@ class GameBoard(tk.Frame):
                 for j in range(int(self.columns/2)):
                     self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
                     self.totalPieces += 1
+
+def callback(event):
+    print("clicked at", event.x, event.y)
 
 
 if __name__ == "__main__":
