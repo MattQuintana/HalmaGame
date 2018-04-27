@@ -22,13 +22,13 @@ class GameBoard(tk.Frame):
         self.board = tk.Canvas(self, borderwidth=2, highlightthickness=0,
                                 width=boardWidth, height=boardHeight, background="bisque")
 
-        self.board.bind("<Button-1>", callback)
+        self.board.bind("<Button-1>", self.callback)
 
         self.board.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
         self.board.bind("<Configure>", self.refresh)
 
-        #self.initPieces(1, photo)
+        self.initPieces(1, photo)
         #self.initPieces(2, photo)
 
     def refresh(self, event):
@@ -53,7 +53,7 @@ class GameBoard(tk.Frame):
         self.board.tag_lower("square")
 
     def createPiece(self, name, image, row, col):
-        self.board.create_image(0, 0, tags=(name, 'piece'), image=image, anchor='c')
+        self.board.create_image(0, 0, tags=(name, 'piece'), image=image, anchor='center')
         self.placePiece(name, row, col)
 
     def placePiece(self, name, row, col):
@@ -64,11 +64,12 @@ class GameBoard(tk.Frame):
 
     def initPieces(self, player, photo):
         if player == 1:
-            self.createPiece(self.totalPieces, photo, 0, 0)
+            self.createPiece(self.totalPieces, photo, 100, 100)
             self.totalPieces += 1
             for i in range(int(self.rows/2)):
-                for j in range(int(self.columns/2)):
-                    self.createPiece(self.totalPieces, photo, i, j-i)
+                for j in range(int(self.columns/2)-i):
+
+                    self.createPiece(self.totalPieces, photo, i, j)
                     self.totalPieces += 1
         elif player == 2:
             for i in range(int(self.rows/2)):
@@ -76,24 +77,25 @@ class GameBoard(tk.Frame):
                     self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
                     self.totalPieces += 1
 
+    def callback(self, event):
+        row = event.y
+        col = event.x
+        counter1 = 0
+        counter2 = 0
+        while row >= 0:
+            row -= self.sqrSize
+            counter1 += 1
 
-def callback(event):
-    row = event.y
-    col = event.x
-    counter1 = 0
-    counter2 = 0
-    while row >= 0:
-        row -= 32
-        counter1 += 1
+        while col >= 0:
+            col -= self.sqrSize
+            counter2 += 1
 
-    while col >= 0:
-        col -= 32
-        counter2 += 1
+        coords = (counter1 - 1, counter2 - 1)
 
-    coords = (counter1-1, counter2-1)
+        print("clicked at tile", coords)
+        return coords
 
-    print("clicked at tile", coords)
-    return coords
+
 
 
 if __name__ == "__main__":
@@ -104,8 +106,6 @@ if __name__ == "__main__":
     photo = photo.zoom(25)
     photo = photo.subsample(100)
     board = GameBoard(root)
-
-    board.createPiece("1", photo, 0, 0)
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     root.mainloop()
