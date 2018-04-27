@@ -1,5 +1,5 @@
 import tkinter as tk
-
+from Board import Board
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, size=32, color1="white", color2="black"):
@@ -103,9 +103,27 @@ if __name__ == "__main__":
     photo = tk.PhotoImage(file="red.png")
     photo = photo.zoom(25)
     photo = photo.subsample(100)
+
+    p2 = tk.PhotoImage(file="green.png")
+    p2 = p2.zoom(25)
+    p2 = p2.subsample(100)
+
     board = GameBoard(root)
 
-    board.createPiece("1", photo, 0, 0)
+    data_board = Board(8)
+    data_board.initRedPieces(4)
+    data_board.initGreenPieces(4)
+
+    red_count = 0
+    green_count = 0
+    for i in range(0, data_board.get_height()):
+        for j in range(0, data_board.get_width()):
+            if (data_board.get_piece_at(i, j) == 1):
+                board.createPiece("p1_" + str(red_count), photo, i, j)
+                red_count += 1
+            elif (data_board.get_piece_at(i, j) == 2):
+                board.createPiece("p2_" + str(green_count), p2, i, j)
+                green_count += 1
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     root.mainloop()

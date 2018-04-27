@@ -5,7 +5,7 @@ class Board:
     def __init__(self, size):
         # Board representation
         self.board = []
-
+        self.size = size
         # Initialize the board with all empty spaces
         for i in range(0, size):
             row = []
@@ -25,6 +25,12 @@ class Board:
             end_col = size*2
             for col in range(start_col, end_col):
                 self.place_piece(2, cur_row, col)
+
+    def get_height(self):
+        return self.size
+
+    def get_width(self):
+        return self.size
 
     def get_board(self):
         return self.board
