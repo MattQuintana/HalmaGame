@@ -1,4 +1,6 @@
 import tkinter as tk
+
+
 class GameBoard(tk.Frame):
     def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, size=32, color1="white", color2="black"):
         self.rows = rows
@@ -74,9 +76,24 @@ class GameBoard(tk.Frame):
                     self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
                     self.totalPieces += 1
 
+
 def callback(event):
-    print("clicked at", event.x, event.y)
-    return(event.x, event.y)
+    row = event.y
+    col = event.x
+    counter1 = 0
+    counter2 = 0
+    while row >= 0:
+        row -= 32
+        counter1 += 1
+
+    while col >= 0:
+        col -= 32
+        counter2 += 1
+
+    coords = (counter1-1, counter2-1)
+
+    print("clicked at tile", coords)
+    return coords
 
 
 if __name__ == "__main__":
