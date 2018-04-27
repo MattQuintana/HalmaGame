@@ -22,13 +22,13 @@ class GameBoard(tk.Frame):
         self.board = tk.Canvas(self, borderwidth=2, highlightthickness=0,
                                 width=boardWidth, height=boardHeight, background="bisque")
 
-        self.board.bind("<Button-1>", self.callback)
+        self.board.bind("<Button-1>", self.playerClick)
 
         self.board.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
         self.board.bind("<Configure>", self.refresh)
 
-        self.initPieces(1, photo)
+        #self.initPieces(1, photo)
         #self.initPieces(2, photo)
 
     def refresh(self, event):
@@ -77,7 +77,7 @@ class GameBoard(tk.Frame):
                     self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
                     self.totalPieces += 1
 
-    def callback(self, event):
+    def playerClick(self, event):
         row = event.y
         col = event.x
         counter1 = 0
@@ -91,6 +91,11 @@ class GameBoard(tk.Frame):
             counter2 += 1
 
         coords = (counter1 - 1, counter2 - 1)
+
+        if data_board.get_piece_at(coords[0], coords[1]):
+            print("Piece Selected")
+        else:
+            print("No piece selected")
 
         print("clicked at tile", coords)
         return coords
