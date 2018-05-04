@@ -188,7 +188,7 @@ class GameBoard(tk.Frame):
                     self.createPiece("p1_" + str(red_count), photo, i, j)
                     red_count += 1
                 elif (self.data_board.get_piece_at(i, j) == 2):
-                    #self.createPiece("p2_" + str(green_count), p2, i, j)
+                    self.createPiece("p2_" + str(green_count), p2, i, j)
                     green_count += 1
 
 
