@@ -4,6 +4,11 @@ from Node import Node
 
 class MachinePlayer:
 
+    def __init__(self):
+        self.move_list = []
+        self.piece_selected = 0
+        self.selected_coords = ()
+
     def move_generator(self, board, player):
         # get all of the pieces that belong to the player
         # for each piece
@@ -54,6 +59,7 @@ class MachinePlayer:
                         future_hops = self.hop_search(row_jump_offset, col_jump_offset, board)
                         # Add them to our list
                         jumps.extend(future_hops)
+                        self.move_list.extend(future_hops)
                         # Return the list back to previous caller
         return jumps
 
@@ -106,10 +112,11 @@ class MachinePlayer:
 
 
         legal_moves.extend(self.hop_search(row, col, board))
-
+        self.move_list.extend(legal_moves)
         return legal_moves
 
-
+    def clear_move_list(self):
+        self.move_list = []
 
     def minimax(self, node):
         pass

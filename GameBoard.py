@@ -1,5 +1,6 @@
 import tkinter as tk
 from Board import Board
+from MachinePlayer import MachinePlayer
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, size=32, color1="white", color2="black"):
@@ -13,6 +14,10 @@ class GameBoard(tk.Frame):
         self.photo2 = photo2
         self.totalPieces = 0
 
+        self.data_board = Board(8)
+        self.data_board.initRedPieces(4)
+        self.data_board.initGreenPieces(4)
+
         boardWidth = columns * size
         boardHeight = rows * size
 
@@ -21,6 +26,7 @@ class GameBoard(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.board = tk.Canvas(self, borderwidth=2, highlightthickness=0,
                                 width=boardWidth, height=boardHeight, background="bisque")
+
 
         self.board.bind("<Button-1>", self.playerClick)
 
@@ -31,8 +37,11 @@ class GameBoard(tk.Frame):
         #self.initPieces(1, photo)
         #self.initPieces(2, photo)
 
+        self.draw_pieces()
+
     def refresh(self, event):
         # Redraw the board, possibly in response to window being manipulated
+        self.board.create_text(250, 250, fill = "red", text="Red Wins")
         xsize = int((event.width - 1) / self.columns)
         ysize = int((event.height - 1) / self.rows)
         self.sqrSize = min(xsize, ysize)
@@ -92,14 +101,48 @@ class GameBoard(tk.Frame):
 
         coords = (counter1 - 1, counter2 - 1)
 
-        if data_board.get_piece_at(coords[0], coords[1]):
-            print("Piece Selected")
+        if self.data_board.get_piece_at(coords[0], coords[1]):
+            # Choose a first piece to move
+            mp1.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
+            mp1.selected_coords = (coords[0], coords[1])
+            if (mp1.move_list == []):
+                print("New piece selected")
+                mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                self.data_board.print_board()
+                # Do some coloring of the board to show valid positions
+            elif (mp1.move_list != []):
+                print("NEW PIECE SELECTED")
+                mp1.clear_move_list()
+                mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                # Do some coloring of the board
+
         else:
-            print("No piece selected")
+
+            coordinate_tuple = (coords[0], coords[1])
+            if (coordinate_tuple in mp1.move_list):
+                print("Moved piece")
+                self.data_board.remove_piece_at(mp1.selected_coords[0], mp1.selected_coords[1])
+                self.data_board.place_piece(mp1.piece_selected, coords[0], coords[1])
+                self.board.delete("all")
+                #self.board.event_generate("<Configure>", self.refresh())
+                self.draw_pieces()
+                self.data_board.print_board()
+
 
         print("clicked at tile", coords)
         return coords
 
+    def draw_pieces(self):
+        red_count = 0
+        green_count = 0
+        for i in range(0, self.data_board.get_height()):
+            for j in range(0, self.data_board.get_width()):
+                if (self.data_board.get_piece_at(i, j) == 1):
+                    self.createPiece("p1_" + str(red_count), photo, i, j)
+                    red_count += 1
+                elif (self.data_board.get_piece_at(i, j) == 2):
+                    self.createPiece("p2_" + str(green_count), p2, i, j)
+                    green_count += 1
 
 
 
@@ -115,22 +158,10 @@ if __name__ == "__main__":
     p2 = p2.zoom(25)
     p2 = p2.subsample(100)
 
+    mp1 = MachinePlayer()
+
+
     board = GameBoard(root)
-
-    data_board = Board(8)
-    data_board.initRedPieces(4)
-    data_board.initGreenPieces(4)
-
-    red_count = 0
-    green_count = 0
-    for i in range(0, data_board.get_height()):
-        for j in range(0, data_board.get_width()):
-            if (data_board.get_piece_at(i, j) == 1):
-                board.createPiece("p1_" + str(red_count), photo, i, j)
-                red_count += 1
-            elif (data_board.get_piece_at(i, j) == 2):
-                board.createPiece("p2_" + str(green_count), p2, i, j)
-                green_count += 1
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     root.mainloop()

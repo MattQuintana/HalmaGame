@@ -19,7 +19,7 @@ class Board:
     def initRedPieces(self, size):
         for i in range(0, size):
             for j in range(0, size-i):
-                self.place_piece(1, i, j)
+                self.place_piece(2, i, j)
 
     def initGreenPieces(self, size):
         for row in range(0, size):
@@ -27,7 +27,7 @@ class Board:
             start_col = size*2 - 1 - row
             end_col = size*2
             for col in range(start_col, end_col):
-                self.place_piece(2, cur_row, col)
+                self.place_piece(1, cur_row, col)
 
     def get_height(self):
         return self.size
