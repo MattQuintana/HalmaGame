@@ -61,6 +61,24 @@ class GameBoard(tk.Frame):
         self.board.tag_raise("piece")
         self.board.tag_lower("square")
 
+    def manualRefresh(self):
+        self.board.create_text(250, 250, fill="red", text="Red Wins")
+        self.board.delete("square")
+        color = self.color2
+        for row in range(self.rows):
+            color = self.color1 if color == self.color2 else self.color2
+            for col in range(self.columns):
+                x1 = (col * self.sqrSize)
+                y1 = (row * self.sqrSize)
+                x2 = x1 + self.sqrSize
+                y2 = y1 + self.sqrSize
+                self.board.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
+                color = self.color1 if color == self.color2 else self.color2
+        for name in self.pieces:
+            self.placePiece(name, self.pieces[name][0], self.pieces[name][1])
+        self.board.tag_raise("piece")
+        self.board.tag_lower("square")
+
     def createPiece(self, name, image, row, col):
         self.board.create_image(0, 0, tags=(name, 'piece'), image=image, anchor='center')
         self.placePiece(name, row, col)
@@ -125,6 +143,7 @@ class GameBoard(tk.Frame):
                 self.data_board.place_piece(mp1.piece_selected, coords[0], coords[1])
                 self.board.delete("all")
                 #self.board.event_generate("<Configure>", self.refresh())
+                self.manualRefresh()
                 self.draw_pieces()
                 self.data_board.print_board()
 
