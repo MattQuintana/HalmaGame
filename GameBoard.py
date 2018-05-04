@@ -104,6 +104,28 @@ class GameBoard(tk.Frame):
                     self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
                     self.totalPieces += 1
 
+    def detectWin(self):
+        greenWin = False
+        redWin = False
+
+        for coord in self.data_board.greenCorner:
+            if self.data_board.get_piece_at(coord[0], coord[1]) == False:
+                redWin = False
+                break
+            elif self.data_board.get_piece_at(coord[0], coord[1]) == 1:
+                redWin = True
+
+        for coord in self.data_board.redCorner:
+            if self.data_board.get_piece_at(coord[0], coord[1]) == False:
+                greenWin = False
+                break
+            elif self.data_board.get_piece_at(coord[0], coord[1]) == 2:
+                greenWin = True
+
+        rtn = (redWin, greenWin)
+
+        return rtn
+
     def playerClick(self, event):
         row = event.y
         col = event.x
@@ -137,15 +159,21 @@ class GameBoard(tk.Frame):
         else:
 
             coordinate_tuple = (coords[0], coords[1])
-            if (coordinate_tuple in mp1.move_list):
+            if coordinate_tuple in mp1.move_list:
                 print("Moved piece")
                 self.data_board.remove_piece_at(mp1.selected_coords[0], mp1.selected_coords[1])
                 self.data_board.place_piece(mp1.piece_selected, coords[0], coords[1])
                 self.board.delete("all")
-                #self.board.event_generate("<Configure>", self.refresh())
                 self.manualRefresh()
                 self.draw_pieces()
                 self.data_board.print_board()
+                win = self.detectWin()
+                if win[0] is True and win[1] is True:
+                    print("HOW DID YOU GET A TIE?")
+                elif win[0] is True:
+                    print("RED IS THE WINNER!")
+                elif win[1] is True:
+                    print("GREEN IS THE WINNER!")
 
 
         print("clicked at tile", coords)
@@ -160,7 +188,7 @@ class GameBoard(tk.Frame):
                     self.createPiece("p1_" + str(red_count), photo, i, j)
                     red_count += 1
                 elif (self.data_board.get_piece_at(i, j) == 2):
-                    self.createPiece("p2_" + str(green_count), p2, i, j)
+                    #self.createPiece("p2_" + str(green_count), p2, i, j)
                     green_count += 1
 
 

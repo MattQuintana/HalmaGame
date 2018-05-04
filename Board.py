@@ -6,6 +6,8 @@ class Board:
         # Board representation
         self.board = []
         self.size = size
+        self.greenCorner = []
+        self.redCorner = []
         # Initialize the board with all empty spaces
         for i in range(0, size):
             row = []
@@ -20,6 +22,7 @@ class Board:
         for i in range(0, size):
             for j in range(0, size-i):
                 self.place_piece(2, i, j)
+                self.greenCorner.append((i, j))
 
     def initGreenPieces(self, size):
         for row in range(0, size):
@@ -28,6 +31,7 @@ class Board:
             end_col = size*2
             for col in range(start_col, end_col):
                 self.place_piece(1, cur_row, col)
+                self.redCorner.append((cur_row, col))
 
     def get_height(self):
         return self.size
