@@ -4,7 +4,7 @@ from MachinePlayer import MachinePlayer
 import sys
 
 class GameBoard(tk.Frame):
-    def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, tlimit=30, hplayer="green", color1="white", color2="black"):
+    def __init__(self, parent, hplayer, photo1=None, photo2=None, rows=8, columns=8, tlimit=30, color1="white", color2="black"):
         # General Initialization
         self.rows = rows
         self.columns = columns
@@ -16,6 +16,12 @@ class GameBoard(tk.Frame):
         self.photo2 = photo2
         self.tlimit = tlimit
         self.humanPlayer = hplayer
+
+        # Using this for later to distinguish between human and AI moves
+        if hplayer == "green":
+            self.humanTurn = 2
+        elif hplayer == "red":
+            self.humanTurn = 1
 
         # Holding where the latest tile moved from
         self.currentMoveCoords = ()
@@ -264,7 +270,7 @@ if __name__ == "__main__":
     timeLimit = int(sys.argv[2])
     hPlayer = sys.argv[3]
 
-    board = GameBoard(root, columns=bsize, rows=bsize, tlimit=timeLimit, hplayer=hPlayer)
+    board = GameBoard(root, hPlayer, columns=bsize, rows=bsize, tlimit=timeLimit)
     board.master.title("HALMA GAME")
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)

@@ -10,7 +10,6 @@ class MachinePlayer:
         self.selected_coords = ()
         self.prevSpots = []
 
-
     def move_generator(self, board, player):
         # get all of the pieces that belong to the player
         # for each piece
@@ -65,7 +64,6 @@ class MachinePlayer:
                         self.move_list.extend(future_hops)
                         # Return the list back to previous caller
         return jumps
-
 
     # Generate all of the legals moves from some position on the board
     def generate_legal_moves(self, row, col, board):
