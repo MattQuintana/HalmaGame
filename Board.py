@@ -45,9 +45,6 @@ class Board:
     def get_width(self):
         return self.size
 
-    def get_board(self):
-        return self.board
-
     def place_piece(self, player, row, col):
         self.board[row][col] = player
 

@@ -8,6 +8,8 @@ class MachinePlayer:
         self.move_list = []
         self.piece_selected = 0
         self.selected_coords = ()
+        self.prevSpots = []
+
 
     def move_generator(self, board, player):
         # get all of the pieces that belong to the player
@@ -52,7 +54,8 @@ class MachinePlayer:
                         continue
 
                     # if the space isn't filled, add it to the hops list
-                    if (board[row + 2*row_offset][col+2*col_offset] == 0):
+                    if (board[row + 2*row_offset][col+2*col_offset] == 0 and (row + 2*row_offset, col+2*col_offset) not in self.prevSpots):
+                        self.prevSpots.append((row, col))
                         jumps.append((row + 2*row_offset, col + 2*col_offset))
                         # start a recursive hop search from that empty position
                         # Save all of the further jumps we might find
