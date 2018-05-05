@@ -13,6 +13,8 @@ class GameBoard(tk.Frame):
         self.photo1 = photo1
         self.photo2 = photo2
         self.totalPieces = 0
+        self.greenText = 0
+        self.redText = 0
 
         self.data_board = Board(8)
         self.data_board.initRedPieces(4)
@@ -34,14 +36,10 @@ class GameBoard(tk.Frame):
 
         self.board.bind("<Configure>", self.refresh)
 
-        #self.initPieces(1, photo)
-        #self.initPieces(2, photo)
-
         self.draw_pieces()
 
     def refresh(self, event):
         # Redraw the board, possibly in response to window being manipulated
-        self.board.create_text(250, 250, fill = "red", text="Red Wins")
         xsize = int((event.width - 1) / self.columns)
         ysize = int((event.height - 1) / self.rows)
         self.sqrSize = min(xsize, ysize)
@@ -62,7 +60,6 @@ class GameBoard(tk.Frame):
         self.board.tag_lower("square")
 
     def manualRefresh(self):
-        self.board.create_text(250, 250, fill="red", text="Red Wins")
         self.board.delete("square")
         color = self.color2
         for row in range(self.rows):
@@ -146,13 +143,10 @@ class GameBoard(tk.Frame):
             mp1.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
             mp1.selected_coords = (coords[0], coords[1])
             if (mp1.move_list == []):
-                print("New piece selected")
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
-                self.data_board.print_board()
                 # Do some coloring of the board to show valid positions
             elif (mp1.move_list != []):
-                print("NEW PIECE SELECTED")
                 mp1.clear_move_list()
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
@@ -162,24 +156,29 @@ class GameBoard(tk.Frame):
 
             coordinate_tuple = (coords[0], coords[1])
             if coordinate_tuple in mp1.move_list:
-                print("Moved piece")
                 self.data_board.remove_piece_at(mp1.selected_coords[0], mp1.selected_coords[1])
                 self.data_board.place_piece(mp1.piece_selected, coords[0], coords[1])
                 self.board.delete("all")
                 self.manualRefresh()
                 self.draw_pieces()
-                self.data_board.print_board()
                 mp1.selected_coords = (coords[0], coords[1])
                 win = self.detectWin()
                 if win[0] is True and win[1] is True:
                     print("HOW DID YOU GET A TIE?")
                 elif win[0] is True:
                     print("RED IS THE WINNER!")
+                    self.redText = self.board.create_text(250, 250, font=("Purisa", 50), fill="red",
+                                                            text="Red Wins")
+
+                    xOffset = self.findCenter(self.redText)
+                    self.board.move(self.redText, xOffset, 0)
                 elif win[1] is True:
                     print("GREEN IS THE WINNER!")
+                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green",
+                                                            text="Green Wins")
+                    xOffset = self.findCenter(self.greenText)
+                    self.board.move(self.greenText, xOffset, 0)
 
-
-        print("clicked at tile", coords)
         return coords
 
     def draw_pieces(self):
@@ -194,7 +193,10 @@ class GameBoard(tk.Frame):
                     self.createPiece("p2_" + str(green_count), p2, i, j)
                     green_count += 1
 
-
+    def findCenter(self, item):
+        coords = self.board.bbox(item)
+        xOffset = (self.board.winfo_width() / 2) - ((coords[2] - coords[0]) / 2)
+        return xOffset
 
 if __name__ == "__main__":
     root = tk.Tk()
