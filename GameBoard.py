@@ -147,12 +147,14 @@ class GameBoard(tk.Frame):
             mp1.selected_coords = (coords[0], coords[1])
             if (mp1.move_list == []):
                 print("New piece selected")
+                mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
                 self.data_board.print_board()
                 # Do some coloring of the board to show valid positions
             elif (mp1.move_list != []):
                 print("NEW PIECE SELECTED")
                 mp1.clear_move_list()
+                mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
                 # Do some coloring of the board
 
