@@ -13,8 +13,11 @@ class GameBoard(tk.Frame):
         self.photo1 = photo1
         self.photo2 = photo2
         self.totalPieces = 0
+
         self.greenText = 0
         self.redText = 0
+
+        self.turn = 1
 
         self.data_board = Board(8)
         self.data_board.initRedPieces(4)
@@ -138,10 +141,11 @@ class GameBoard(tk.Frame):
 
         coords = (counter1 - 1, counter2 - 1)
 
-        if self.data_board.get_piece_at(coords[0], coords[1]):
+        if self.data_board.get_piece_at(coords[0], coords[1]) == self.turn:
             # Choose a first piece to move
             mp1.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
             mp1.selected_coords = (coords[0], coords[1])
+
             if (mp1.move_list == []):
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
@@ -167,18 +171,20 @@ class GameBoard(tk.Frame):
                     print("HOW DID YOU GET A TIE?")
                 elif win[0] is True:
                     print("RED IS THE WINNER!")
-                    self.redText = self.board.create_text(250, 250, font=("Purisa", 50), fill="red",
-                                                            text="Red Wins")
+                    self.redText = self.board.create_text(250, 250, font=("Purisa", 50), fill="red", text="Red Wins")
 
                     xOffset = self.findCenter(self.redText)
                     self.board.move(self.redText, xOffset, 0)
                 elif win[1] is True:
                     print("GREEN IS THE WINNER!")
-                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green",
-                                                            text="Green Wins")
+                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green", text="Green Wins")
                     xOffset = self.findCenter(self.greenText)
                     self.board.move(self.greenText, xOffset, 0)
-
+                if self.turn == 1:
+                    self.turn = 2
+                else:
+                    self.turn = 1
+                mp1.clear_move_list()
         return coords
 
     def draw_pieces(self):
