@@ -17,11 +17,7 @@ class GameBoard(tk.Frame):
         self.tlimit = tlimit
         self.humanPlayer = hplayer
 
-        # Using this for later to distinguish between human and AI moves
-        if hplayer == "green":
-            self.humanTurn = 2
-        elif hplayer == "red":
-            self.humanTurn = 1
+
 
         # Holding where the latest tile moved from
         self.currentMoveCoords = ()
@@ -31,6 +27,8 @@ class GameBoard(tk.Frame):
         # Initializer for the win text
         self.greenText = 0
         self.redText = 0
+        self.aiMove = 0
+        self.playerMove = 0
 
         self.turn = 2
 
@@ -65,7 +63,14 @@ class GameBoard(tk.Frame):
 
         self.board.bind("<Configure>", self.refresh)
 
+        # Using this for later to distinguish between human and AI moves
+
         self.draw_pieces()
+
+        if hplayer == "green":
+            self.humanTurn = 2
+        elif hplayer == "red":
+            self.humanTurn = 1
 
     # Method to update the board when the window is resized
     def refresh(self, event):
@@ -177,6 +182,7 @@ class GameBoard(tk.Frame):
                 self.board.delete("all")
                 self.manualRefresh()
                 self.draw_pieces()
+                self.drawTurnStatus()
                 humanPlayer.clear_move_list()
                 humanPlayer.prevSpots = []
                 humanPlayer.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
@@ -189,6 +195,7 @@ class GameBoard(tk.Frame):
                 self.data_board.place_piece(humanPlayer.piece_selected, coords[0], coords[1])
                 self.board.delete("all")
                 self.manualRefresh()
+                self.drawTurnStatus()
                 self.draw_pieces()
                 self.drawLatestMove(self.currentMoveCoords, 'a')
                 self.drawLatestMove(coordinate_tuple, 'b')
@@ -198,15 +205,15 @@ class GameBoard(tk.Frame):
                     print("HOW DID YOU GET A TIE?")
                 elif win[0] is True:
                     print("RED IS THE WINNER!")
-                    self.redText = self.board.create_text(250, 250, font=("Purisa", 50), fill="red", text="Red Wins")
-                    xOffset = self.findCenter(self.redText)
-                    self.board.move(self.redText, xOffset, 0)
+                    self.redText = self.board.create_text(900, 300, font=("Purisa", 50), fill="red", text="Red Wins")
+                    self.board.unbind("<Button-1>")
+                    self.board.bind("<Button-1>", self.restartClick())
                 elif win[1] is True:
                     print("GREEN IS THE WINNER!")
-                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green",
+                    self.greenText = self.board.create_text(900, 300, font=("Purisa", 50), fill="green",
                                                             text="Green Wins")
-                    xOffset = self.findCenter(self.greenText)
-                    self.board.move(self.greenText, xOffset, 0)
+                    self.board.unbind("<Button-1>")
+                    self.board.bind("<Button-1>", self.restartClick())
                 # Changing whose turn it is
                 if self.turn == 1:
                     self.turn = 2
@@ -214,6 +221,14 @@ class GameBoard(tk.Frame):
                     self.turn = 1
                 humanPlayer.clear_move_list()
         return coords
+
+    def restartClick(self, event):
+        self.data_board = Board(self.rows)
+        self.data_board.initRedPieces(int(self.rows / 2))
+        self.data_board.initGreenPieces(int(self.rows / 2))
+        self.draw_pieces()
+        self.board.unbind("<Button-1>")
+        self.board.bind("<Button-1>", self.playerClick())
 
     # Populate the GUI with tiles at the appropriate locations
     def draw_pieces(self):
@@ -251,11 +266,19 @@ class GameBoard(tk.Frame):
         y0 = (coords[0] * self.sqrSize) + int(self.sqrSize / 2)
         self.board.coords(name, x0, y0)
 
+    def drawTurnStatus(self):
+        if self.turn != self.humanTurn:
+            self.playerMove = self.board.create_text(900, 100, font=("Purisa", 50), fill="Gold2",
+                                                    text="Your Move")
+        else:
+            self.playerMove = self.board.create_text(900, 100, font=("Purisa", 50), fill="Gold2",
+                                                     text="I'm Thinking...")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.resizable(width=True, height=True)
-    root.minsize(width=666, height=666)
+    root.resizable(width=False, height=False)
+    root.minsize(width=1200, height=666)
     photo = tk.PhotoImage(file="red.png")
     photo = photo.zoom(25)
     photo = photo.subsample(100)
