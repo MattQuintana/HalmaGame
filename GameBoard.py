@@ -108,15 +108,17 @@ class GameBoard(tk.Frame):
         greenWin = False
         redWin = False
 
+        self.data_board.print_board()
+
         for coord in self.data_board.greenCorner:
-            if self.data_board.get_piece_at(coord[0], coord[1]) == False:
+            if self.data_board.get_piece_at(coord[0], coord[1]) == False or self.data_board.get_piece_at(coord[0], coord[1]) == 2:
                 redWin = False
                 break
             elif self.data_board.get_piece_at(coord[0], coord[1]) == 1:
                 redWin = True
 
         for coord in self.data_board.redCorner:
-            if self.data_board.get_piece_at(coord[0], coord[1]) == False:
+            if self.data_board.get_piece_at(coord[0], coord[1]) == False or self.data_board.get_piece_at(coord[0], coord[1]) == 1:
                 greenWin = False
                 break
             elif self.data_board.get_piece_at(coord[0], coord[1]) == 2:
