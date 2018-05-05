@@ -1,24 +1,29 @@
 import tkinter as tk
 from Board import Board
 from MachinePlayer import MachinePlayer
+import sys
 
 class GameBoard(tk.Frame):
-    def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, size=32, color1="white", color2="black"):
+    def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, tlimit=30, hplayer="green", color1="white", color2="black"):
         self.rows = rows
         self.columns = columns
-        self.sqrSize = size
+        self.sqrSize = 32
         self.color1 = color1
         self.color2 = color2
         self.pieces = {}
         self.photo1 = photo1
         self.photo2 = photo2
+        self.tlimit = tlimit
+        self.humanPlayer = hplayer
+
+        self.currentMoveCoords = ()
 
         self.totalPieces = 0
 
         self.greenText = 0
         self.redText = 0
 
-        self.turn = 1
+        self.turn = 2
 
         self.data_board = Board(rows)
         self.data_board.initRedPieces(int(rows/2))
@@ -28,15 +33,18 @@ class GameBoard(tk.Frame):
         self.moveHighlight = self.moveHighlight.zoom(25)
         self.moveHighlight = self.moveHighlight.subsample(100)
 
-        boardWidth = columns * size
-        boardHeight = rows * size
+        self.latestMove = tk.PhotoImage(file="latestMove.png")
+        self.latestMove = self.latestMove.zoom(25)
+        self.latestMove = self.latestMove.subsample(100)
+
+        boardWidth = columns * self.sqrSize
+        boardHeight = rows * self.sqrSize
 
         self.pieceTracker = {}
 
         tk.Frame.__init__(self, parent)
-        self.board = tk.Canvas(self, borderwidth=2, highlightthickness=0,
-                                width=boardWidth, height=boardHeight, background="bisque")
-
+        self.board = tk.Canvas(self, borderwidth=10, highlightthickness=0, width=boardWidth, height=boardHeight,
+                               background="SteelBlue2")
 
         self.board.bind("<Button-1>", self.playerClick)
 
@@ -148,35 +156,38 @@ class GameBoard(tk.Frame):
 
         if self.data_board.get_piece_at(coords[0], coords[1]) == self.turn:
             # Choose a first piece to move
-            mp1.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
-            mp1.selected_coords = (coords[0], coords[1])
+            humanPlayer.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
+            humanPlayer.selected_coords = (coords[0], coords[1])
+            self.currentMoveCoords = (coords[0], coords[1])
 
-            if (mp1.move_list == []):
-                mp1.prevSpots = []
-                mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
-                self.drawMoves(mp1.move_list)
+            if (humanPlayer.move_list == []):
+                humanPlayer.prevSpots = []
+                humanPlayer.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                self.drawMoves(humanPlayer.move_list)
 
                 # Do some coloring of the board to show valid positions
-            elif (mp1.move_list != []):
+            elif (humanPlayer.move_list != []):
                 self.board.delete("all")
                 self.manualRefresh()
                 self.draw_pieces()
-                mp1.clear_move_list()
-                mp1.prevSpots = []
-                mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
-                self.drawMoves(mp1.move_list)
+                humanPlayer.clear_move_list()
+                humanPlayer.prevSpots = []
+                humanPlayer.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                self.drawMoves(humanPlayer.move_list)
                 # Do some coloring of the board
 
         else:
 
             coordinate_tuple = (coords[0], coords[1])
-            if coordinate_tuple in mp1.move_list:
-                self.data_board.remove_piece_at(mp1.selected_coords[0], mp1.selected_coords[1])
-                self.data_board.place_piece(mp1.piece_selected, coords[0], coords[1])
+            if coordinate_tuple in humanPlayer.move_list:
+                self.data_board.remove_piece_at(humanPlayer.selected_coords[0], humanPlayer.selected_coords[1])
+                self.data_board.place_piece(humanPlayer.piece_selected, coords[0], coords[1])
                 self.board.delete("all")
                 self.manualRefresh()
                 self.draw_pieces()
-                mp1.selected_coords = (coords[0], coords[1])
+                self.drawLatestMove(self.currentMoveCoords, 'a')
+                self.drawLatestMove(coordinate_tuple, 'b')
+                humanPlayer.selected_coords = (coords[0], coords[1])
                 win = self.detectWin()
                 if win[0] is True and win[1] is True:
                     print("HOW DID YOU GET A TIE?")
@@ -195,7 +206,7 @@ class GameBoard(tk.Frame):
                     self.turn = 2
                 else:
                     self.turn = 1
-                mp1.clear_move_list()
+                humanPlayer.clear_move_list()
         return coords
 
     def draw_pieces(self):
@@ -203,10 +214,10 @@ class GameBoard(tk.Frame):
         green_count = 0
         for i in range(0, self.data_board.get_height()):
             for j in range(0, self.data_board.get_width()):
-                if (self.data_board.get_piece_at(i, j) == 1):
+                if self.data_board.get_piece_at(i, j) == 1:
                     self.createPiece("p1_" + str(red_count), photo, i, j)
                     red_count += 1
-                elif (self.data_board.get_piece_at(i, j) == 2):
+                elif self.data_board.get_piece_at(i, j) == 2:
                     self.createPiece("p2_" + str(green_count), p2, i, j)
                     green_count += 1
 
@@ -224,6 +235,13 @@ class GameBoard(tk.Frame):
             self.board.coords(name, x0, y0)
             name -= 1
 
+    def drawLatestMove(self, coords, name):
+        self.board.create_image(0, 0, tags=name, image=self.latestMove, anchor='center')
+        x0 = (coords[1] * self.sqrSize) + int(self.sqrSize / 2)
+        y0 = (coords[0] * self.sqrSize) + int(self.sqrSize / 2)
+        self.board.coords(name, x0, y0)
+
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.resizable(width=True, height=True)
@@ -236,10 +254,14 @@ if __name__ == "__main__":
     p2 = p2.zoom(25)
     p2 = p2.subsample(100)
 
-    mp1 = MachinePlayer()
+    humanPlayer = MachinePlayer()
 
+    bsize = int(sys.argv[1])
+    timeLimit = int(sys.argv[2])
+    hPlayer = sys.argv[3]
 
-    board = GameBoard(root)
+    board = GameBoard(root, columns=bsize, rows=bsize, tlimit=timeLimit, hplayer=hPlayer)
+    board.master.title("HALMA GAME")
 
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     root.mainloop()
