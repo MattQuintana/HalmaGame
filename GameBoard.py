@@ -12,6 +12,7 @@ class GameBoard(tk.Frame):
         self.pieces = {}
         self.photo1 = photo1
         self.photo2 = photo2
+
         self.totalPieces = 0
 
         self.greenText = 0
@@ -19,9 +20,13 @@ class GameBoard(tk.Frame):
 
         self.turn = 1
 
-        self.data_board = Board(8)
-        self.data_board.initRedPieces(4)
-        self.data_board.initGreenPieces(4)
+        self.data_board = Board(rows)
+        self.data_board.initRedPieces(int(rows/2))
+        self.data_board.initGreenPieces(int(rows/2))
+
+        self.moveHighlight = tk.PhotoImage(file="validmove.png")
+        self.moveHighlight = self.moveHighlight.zoom(25)
+        self.moveHighlight = self.moveHighlight.subsample(100)
 
         boardWidth = columns * size
         boardHeight = rows * size
@@ -108,8 +113,6 @@ class GameBoard(tk.Frame):
         greenWin = False
         redWin = False
 
-        self.data_board.print_board()
-
         for coord in self.data_board.greenCorner:
             if self.data_board.get_piece_at(coord[0], coord[1]) == False or self.data_board.get_piece_at(coord[0], coord[1]) == 2:
                 redWin = False
@@ -151,11 +154,14 @@ class GameBoard(tk.Frame):
             if (mp1.move_list == []):
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                self.drawMoves(mp1.move_list)
+
                 # Do some coloring of the board to show valid positions
             elif (mp1.move_list != []):
                 mp1.clear_move_list()
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
+                self.drawMoves(mp1.move_list)
                 # Do some coloring of the board
 
         else:
@@ -205,6 +211,15 @@ class GameBoard(tk.Frame):
         coords = self.board.bbox(item)
         xOffset = (self.board.winfo_width() / 2) - ((coords[2] - coords[0]) / 2)
         return xOffset
+
+    def drawMoves(self, moveList):
+        name = -1
+        for coords in moveList:
+            self.board.create_image(0, 0, tags=name, image=self.moveHighlight, anchor='center')
+            x0 = (coords[1] * self.sqrSize) + int(self.sqrSize / 2)
+            y0 = (coords[0] * self.sqrSize) + int(self.sqrSize / 2)
+            self.board.coords(name, x0, y0)
+            name -= 1
 
 if __name__ == "__main__":
     root = tk.Tk()
