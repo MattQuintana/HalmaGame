@@ -66,8 +66,8 @@
       <file leaf-file-name="GameBoard.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GameBoard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="229" column="38" lean-forward="false" selection-start-line="229" selection-start-column="38" selection-end-line="229" selection-end-column="38" />
+            <state relative-caret-position="-238">
+              <caret line="228" column="54" lean-forward="true" selection-start-line="228" selection-start-column="54" selection-end-line="228" selection-end-column="54" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -843,8 +843,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/GameBoard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="229" column="38" lean-forward="false" selection-start-line="229" selection-start-column="38" selection-end-line="229" selection-end-column="38" />
+        <state relative-caret-position="-238">
+          <caret line="228" column="54" lean-forward="true" selection-start-line="228" selection-start-column="54" selection-end-line="228" selection-end-column="54" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>

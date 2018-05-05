@@ -3,6 +3,7 @@ from Board import Board
 from MachinePlayer import MachinePlayer
 import sys
 
+
 class GameBoard(tk.Frame):
     def __init__(self, parent, hplayer, photo1=None, photo2=None, rows=8, columns=8, tlimit=30, color1="white", color2="black"):
         # General Initialization
@@ -16,8 +17,6 @@ class GameBoard(tk.Frame):
         self.photo2 = photo2
         self.tlimit = tlimit
         self.humanPlayer = hplayer
-
-
 
         # Holding where the latest tile moved from
         self.currentMoveCoords = ()
@@ -164,7 +163,6 @@ class GameBoard(tk.Frame):
 
         # Generating the coordinate of the tile that the user clicked
         coords = (counter1 - 1, counter2 - 1)
-
         # If a piece exists in the clicked tile and it is that color's turn...
         if self.data_board.get_piece_at(coords[0], coords[1]) == self.turn:
             humanPlayer.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
@@ -207,13 +205,13 @@ class GameBoard(tk.Frame):
                     print("RED IS THE WINNER!")
                     self.redText = self.board.create_text(900, 300, font=("Purisa", 50), fill="red", text="Red Wins")
                     self.board.unbind("<Button-1>")
-                    self.board.bind("<Button-1>", self.restartClick())
+                    self.board.bind("<Button-1>", self.restartClick)
                 elif win[1] is True:
                     print("GREEN IS THE WINNER!")
                     self.greenText = self.board.create_text(900, 300, font=("Purisa", 50), fill="green",
                                                             text="Green Wins")
                     self.board.unbind("<Button-1>")
-                    self.board.bind("<Button-1>", self.restartClick())
+                    self.board.bind("<Button-1>", self.restartClick)
                 # Changing whose turn it is
                 if self.turn == 1:
                     self.turn = 2
@@ -228,7 +226,7 @@ class GameBoard(tk.Frame):
         self.data_board.initGreenPieces(int(self.rows / 2))
         self.draw_pieces()
         self.board.unbind("<Button-1>")
-        self.board.bind("<Button-1>", self.playerClick())
+        self.board.bind("<Button-1>", self.playerClick)
 
     # Populate the GUI with tiles at the appropriate locations
     def draw_pieces(self):
