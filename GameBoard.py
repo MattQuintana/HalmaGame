@@ -5,6 +5,7 @@ import sys
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, photo1=None, photo2=None, rows=8, columns=8, tlimit=30, hplayer="green", color1="white", color2="black"):
+        # General Initialization
         self.rows = rows
         self.columns = columns
         self.sqrSize = 32
@@ -16,23 +17,28 @@ class GameBoard(tk.Frame):
         self.tlimit = tlimit
         self.humanPlayer = hplayer
 
+        # Holding where the latest tile moved from
         self.currentMoveCoords = ()
 
         self.totalPieces = 0
 
+        # Initializer for the win text
         self.greenText = 0
         self.redText = 0
 
         self.turn = 2
 
+        # Data representation of the board
         self.data_board = Board(rows)
         self.data_board.initRedPieces(int(rows/2))
         self.data_board.initGreenPieces(int(rows/2))
 
+        # Image to show valid move locations
         self.moveHighlight = tk.PhotoImage(file="validmove.png")
         self.moveHighlight = self.moveHighlight.zoom(25)
         self.moveHighlight = self.moveHighlight.subsample(100)
 
+        # Image to show latest move
         self.latestMove = tk.PhotoImage(file="latestMove.png")
         self.latestMove = self.latestMove.zoom(25)
         self.latestMove = self.latestMove.subsample(100)
@@ -42,6 +48,7 @@ class GameBoard(tk.Frame):
 
         self.pieceTracker = {}
 
+        # Creating the canvas
         tk.Frame.__init__(self, parent)
         self.board = tk.Canvas(self, borderwidth=10, highlightthickness=0, width=boardWidth, height=boardHeight,
                                background="SteelBlue2")
@@ -54,8 +61,8 @@ class GameBoard(tk.Frame):
 
         self.draw_pieces()
 
+    # Method to update the board when the window is resized
     def refresh(self, event):
-        # Redraw the board, possibly in response to window being manipulated
         xsize = int((event.width - 1) / self.columns)
         ysize = int((event.height - 1) / self.rows)
         self.sqrSize = min(xsize, ysize)
@@ -75,6 +82,7 @@ class GameBoard(tk.Frame):
         self.board.tag_raise("piece")
         self.board.tag_lower("square")
 
+    # Method to update the board manually without being resized
     def manualRefresh(self):
         self.board.delete("square")
         color = self.color2
@@ -92,35 +100,24 @@ class GameBoard(tk.Frame):
         self.board.tag_raise("piece")
         self.board.tag_lower("square")
 
+    # Method to create a piece
     def createPiece(self, name, image, row, col):
         self.board.create_image(0, 0, tags=(name, 'piece'), image=image, anchor='center')
         self.placePiece(name, row, col)
 
+    # Used in the createPiece method, just places the piece on the board after it is created
     def placePiece(self, name, row, col):
         self.pieces[name] = (row, col)
         x0 = (col * self.sqrSize) + int(self.sqrSize / 2)
         y0 = (row * self.sqrSize) + int(self.sqrSize / 2)
         self.board.coords(name, x0, y0)
 
-    def initPieces(self, player, photo):
-        if player == 1:
-            self.createPiece(self.totalPieces, photo, 100, 100)
-            self.totalPieces += 1
-            for i in range(int(self.rows/2)):
-                for j in range(int(self.columns/2)-i):
-
-                    self.createPiece(self.totalPieces, photo, i, j)
-                    self.totalPieces += 1
-        elif player == 2:
-            for i in range(int(self.rows/2)):
-                for j in range(int(self.columns/2)):
-                    self.createPiece(self.totalPieces, photo,self.rows-1-i, self.rows-1-(j-i))
-                    self.totalPieces += 1
-
+    # Detecting win condition
     def detectWin(self):
         greenWin = False
         redWin = False
 
+        # Checking if all the tiles in the green corner are filled with red tiles
         for coord in self.data_board.greenCorner:
             if self.data_board.get_piece_at(coord[0], coord[1]) == False or self.data_board.get_piece_at(coord[0], coord[1]) == 2:
                 redWin = False
@@ -128,6 +125,7 @@ class GameBoard(tk.Frame):
             elif self.data_board.get_piece_at(coord[0], coord[1]) == 1:
                 redWin = True
 
+        # Checking if all the tiles in the red corner are filled with green tiles
         for coord in self.data_board.redCorner:
             if self.data_board.get_piece_at(coord[0], coord[1]) == False or self.data_board.get_piece_at(coord[0], coord[1]) == 1:
                 greenWin = False
@@ -139,6 +137,7 @@ class GameBoard(tk.Frame):
 
         return rtn
 
+    # Function to catch when a player clicks
     def playerClick(self, event):
         row = event.y
         col = event.x
@@ -152,21 +151,23 @@ class GameBoard(tk.Frame):
             col -= self.sqrSize
             counter2 += 1
 
+        # Generating the coordinate of the tile that the user clicked
         coords = (counter1 - 1, counter2 - 1)
 
+        # If a piece exists in the clicked tile and it is that color's turn...
         if self.data_board.get_piece_at(coords[0], coords[1]) == self.turn:
-            # Choose a first piece to move
             humanPlayer.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
             humanPlayer.selected_coords = (coords[0], coords[1])
             self.currentMoveCoords = (coords[0], coords[1])
 
-            if (humanPlayer.move_list == []):
+            # If no other tile has already been clicked, generate moves for this tile
+            if humanPlayer.move_list == []:
                 humanPlayer.prevSpots = []
                 humanPlayer.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
                 self.drawMoves(humanPlayer.move_list)
 
-                # Do some coloring of the board to show valid positions
-            elif (humanPlayer.move_list != []):
+            # If another tile has been clicked, clear everything and select this one
+            elif humanPlayer.move_list != []:
                 self.board.delete("all")
                 self.manualRefresh()
                 self.draw_pieces()
@@ -174,10 +175,8 @@ class GameBoard(tk.Frame):
                 humanPlayer.prevSpots = []
                 humanPlayer.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
                 self.drawMoves(humanPlayer.move_list)
-                # Do some coloring of the board
-
+        # No piece exists at the tile, implying that the user is moving a piece
         else:
-
             coordinate_tuple = (coords[0], coords[1])
             if coordinate_tuple in humanPlayer.move_list:
                 self.data_board.remove_piece_at(humanPlayer.selected_coords[0], humanPlayer.selected_coords[1])
@@ -194,14 +193,15 @@ class GameBoard(tk.Frame):
                 elif win[0] is True:
                     print("RED IS THE WINNER!")
                     self.redText = self.board.create_text(250, 250, font=("Purisa", 50), fill="red", text="Red Wins")
-
                     xOffset = self.findCenter(self.redText)
                     self.board.move(self.redText, xOffset, 0)
                 elif win[1] is True:
                     print("GREEN IS THE WINNER!")
-                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green", text="Green Wins")
+                    self.greenText = self.board.create_text(250, 250, font=("Purisa", 50), fill="green",
+                                                            text="Green Wins")
                     xOffset = self.findCenter(self.greenText)
                     self.board.move(self.greenText, xOffset, 0)
+                # Changing whose turn it is
                 if self.turn == 1:
                     self.turn = 2
                 else:
@@ -209,6 +209,7 @@ class GameBoard(tk.Frame):
                 humanPlayer.clear_move_list()
         return coords
 
+    # Populate the GUI with tiles at the appropriate locations
     def draw_pieces(self):
         red_count = 0
         green_count = 0
@@ -221,11 +222,13 @@ class GameBoard(tk.Frame):
                     self.createPiece("p2_" + str(green_count), p2, i, j)
                     green_count += 1
 
+    # Find the center of the board
     def findCenter(self, item):
         coords = self.board.bbox(item)
         xOffset = (self.board.winfo_width() / 2) - ((coords[2] - coords[0]) / 2)
         return xOffset
 
+    # Highlighting the squares that the currently selected piece can move to
     def drawMoves(self, moveList):
         name = -1
         for coords in moveList:
@@ -235,6 +238,7 @@ class GameBoard(tk.Frame):
             self.board.coords(name, x0, y0)
             name -= 1
 
+    # Draw two circles, one where the moved piece just was and where it is now
     def drawLatestMove(self, coords, name):
         self.board.create_image(0, 0, tags=name, image=self.latestMove, anchor='center')
         x0 = (coords[1] * self.sqrSize) + int(self.sqrSize / 2)
