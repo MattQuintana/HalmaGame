@@ -158,6 +158,9 @@ class GameBoard(tk.Frame):
 
                 # Do some coloring of the board to show valid positions
             elif (mp1.move_list != []):
+                self.board.delete("all")
+                self.manualRefresh()
+                self.draw_pieces()
                 mp1.clear_move_list()
                 mp1.prevSpots = []
                 mp1.generate_legal_moves(coords[0], coords[1], self.data_board.get_board())
