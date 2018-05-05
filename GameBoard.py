@@ -169,6 +169,7 @@ class GameBoard(tk.Frame):
                 self.manualRefresh()
                 self.draw_pieces()
                 self.data_board.print_board()
+                mp1.selected_coords = (coords[0], coords[1])
                 win = self.detectWin()
                 if win[0] is True and win[1] is True:
                     print("HOW DID YOU GET A TIE?")
