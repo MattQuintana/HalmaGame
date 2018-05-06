@@ -1,6 +1,7 @@
 __author__ = 'Matt Q'
 
 from Node import Node
+from Board import Board
 
 class MachinePlayer:
 
@@ -119,5 +120,71 @@ class MachinePlayer:
     def clear_move_list(self):
         self.move_list = []
 
-    def minimax(self, node):
+
+    '''
+     Minimax con alfa-beta
+     Pseudocode
+     Entrada: Nodo N, valores alfa y beta
+     Salida: Valor minimax de dicho nodo
+
+     Si N es nodo hoja entonce devlolver f(N)
+     sino
+       Si N es nodo MAX entonces
+           Para k = 1 hasta b hacer
+                alfa = max [alfa, Evaluation(N_k, alfa, beta)]
+                Si alfa >= beta then return beta ENDIF
+                IF k = b then return alfa ENDIF
+            END For loop
+        else
+            for k = 1 until b DO:
+                beta = minimum[beta, Evaluation(N_k, alfa, beta)]
+                if alfa >= beta then return alfa ENDIF
+                if k = b then return beta ENDIF
+            END FOR
+        ENDIF
+    ENDIF
+    '''
+
+    def alphaBetaSearch(self, node):
         pass
+        
+    def minimax(self, node, alfa, beta):
+        # Get the data that we are working with out of the node
+        game_board_copy = Board()
+        game_board_copy.set_board(node.get_board())
+
+        win_detect = game_board_copy.detectWin()
+
+        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
+            pass
+            # return the evaluation function of the node since we have reached a leaf node
+
+        player = node.get_player()
+
+        if player == 1:
+            player_positions = game_board_copy.get_red_positions()
+        elif player == 2:
+            player_positions = game_board_copy.get_green_positions()
+
+
+        # if node type is max
+            # for every possible position that our player can move from
+                # for evey move that can be made from that position
+                    # Create a copy of the table that has that particular move made
+                    # Create a new node that has that table and set it to be a min node
+                    # alpha equals the max of alpha and minimax of the next node and our
+                    # current alpha and beta
+
+                    # if alpha is bigger than beta then return beta
+                    # if we've reached the end of all possible pieces, return alpha
+
+        # else if node type is min
+            # for every possible position that our player can move from
+                # for every move that can be made from that position
+                    # Create a copy of the table that has that particular move made
+                    # Create a new node that has that table, set it to be a max node
+                    # Beta equals the minimum of Beta and the minimax of the next node
+                    # and our current alpha and beta
+
+                    # if alpha is bigger than beta then return alpha
+                    # if we've reached the end

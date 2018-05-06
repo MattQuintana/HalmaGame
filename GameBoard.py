@@ -33,8 +33,8 @@ class GameBoard(tk.Frame):
 
         # Data representation of the board
         self.data_board = Board(rows)
-        self.data_board.initRedPieces(int(rows/2))
-        self.data_board.initGreenPieces(int(rows/2))
+        self.data_board.initPieces(int(rows/2))
+        #self.data_board.initGreenPieces(int(rows/2))
 
         # Image to show valid move locations
         self.moveHighlight = tk.PhotoImage(file="validmove.png")
@@ -124,6 +124,7 @@ class GameBoard(tk.Frame):
 
     # Detecting win condition
     def detectWin(self):
+        return self.data_board.detectWin()
         greenWin = False
         redWin = False
 

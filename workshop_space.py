@@ -8,15 +8,13 @@ import time
 
 
 def main():
-    board = Board(8)
-    mp = MachinePlayer()
-
-
-    board.initGreenPieces(4)
-    board.print_board()
-
-    data_board = board.get_board()
-    print("Possible moves:", mp.generate_legal_moves(6,6,data_board))
+    a_list = [[1,2,[1,2,3],3,4],[2,3,4,54]]
+    print(a_list)
+    b_list = a_list.copy()
+    print(b_list)
+    a_list.append(36)
+    print(a_list)
+    print(b_list)
 
 
 

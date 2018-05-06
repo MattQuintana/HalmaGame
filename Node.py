@@ -2,15 +2,19 @@ __author__ = 'Matt Q'
 
 class Node:
 
-    def __init__(self, board, node_depth):
+    def __init__(self, player, type, board, node_depth):
         self.board = board
-        self.type = ""
-        self.player = 0
+        self.type = type
+        self.player = player
         self.to_explore = True
         self.node_value = 0
         self.node_depth = node_depth
 
         self.children = []
+
+
+    def get_depth(self):
+        return self.node_depth
 
 
     def get_children(self):
