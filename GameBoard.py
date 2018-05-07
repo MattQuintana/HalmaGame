@@ -69,6 +69,7 @@ class GameBoard(tk.Frame):
             self.humanTurn = 2
         elif hplayer == "red":
             self.humanTurn = 1
+            self.machinePlayer.alphaBetaMinimax(self.data_board)
 
     # Method to update the board when the window is resized
     def refresh(self, event):
