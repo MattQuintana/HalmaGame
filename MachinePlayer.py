@@ -121,9 +121,32 @@ class MachinePlayer:
     def clear_move_list(self):
         self.move_list = []
 
+        
+    def distance(p1,p2):
+        return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
+
+    def utility(self, board):
+        for col in range(b_length):
+            for row in range(b_length):
+                tile = self.board[row][col]
+
+                #if green piece then create distance list for green
+                distanceList = [distance(x,y) for goals in green_goals if piece isnt green already]
+                value -= max(distanceList) if len(distanceList) else -100
+
+                #elif red piece then create distance list for red
+                distanceList = [distance(x,y) for goals in red_goals if piece isnt red already]
+                value += max(distanceList) if len(distanceList) else -100
+
+      #possibly check to see if the tile has red piece and multiply value by negative 1 to switch signs
+
+      return value
+
+
 
     # Evaluate the board and give it a score
     def evaluate(self, node):
+
         # get the player that we are working with
 
         # if the opponent has one give a high negative score
