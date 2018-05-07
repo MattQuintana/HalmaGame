@@ -123,12 +123,17 @@ class MachinePlayer:
         self.move_list = []
 
 
+<<<<<<< HEAD
     def distance(self, p1,p2):
+=======
+    def distance(self,p1,p2):
+>>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
     def utility(self, node):
         board = node.board
         value = 0
+<<<<<<< HEAD
         for col in range(board.get_width()):
             for row in range(board.get_width()):
                 data_board = board.get_board()
@@ -141,15 +146,35 @@ class MachinePlayer:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
                         value -= max(distanceList) if len(distanceList) else -100
+=======
+        for col in range(board.get_width):
+            for row in range(board.get_width):
+                tile = board[row][col]
+
+                #green piece
+                if tile == 2:
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    green += max(distanceList) if len(distanceList) else -100
+>>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
 
                 #red piece
                 elif tile == 1:
                     #elif red piece then create distance list for red
+<<<<<<< HEAD
                     distanceList = [self.distance((row,col),goals) for goals in board.redCorner if data_board[goals[0]][goals[1]] != 2]
                     if node.player == 2:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
                         value -= max(distanceList) if len(distanceList) else -100
+=======
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 1]
+                    red += max(distanceList) if len(distanceList) else -
+        if node.player == 1:
+            value = red/green
+        else:
+            value = green/red
+
+>>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
         return value
 
 
