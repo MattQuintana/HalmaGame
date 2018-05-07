@@ -128,6 +128,7 @@ class MachinePlayer:
 
     def utility(self, node):
         board = node.board
+        value = 0
         for col in range(board.get_width):
             for row in range(board.get_width):
                 tile = board[row][col]
@@ -135,19 +136,18 @@ class MachinePlayer:
                 #green piece
                 if tile == 2:
                     distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
-                    if node.player == 1:
-                        value += max(distanceList) if len(distanceList) else -100
-                    else:
-                        value -= max(distanceList) if len(distanceList) else -100
+                    green += max(distanceList) if len(distanceList) else -100
 
                 #red piece
                 elif tile == 1:
                     #elif red piece then create distance list for red
-                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
-                    if node.player == 2:
-                        value += max(distanceList) if len(distanceList) else -100
-                    else:
-                        value -= max(distanceList) if len(distanceList) else -100
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 1]
+                    red += max(distanceList) if len(distanceList) else -
+        if node.player == 1:
+            value = green/red
+        else:
+            value = red / green
+
         return value
 
 
