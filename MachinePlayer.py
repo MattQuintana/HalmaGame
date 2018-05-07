@@ -3,6 +3,7 @@ __author__ = 'Matt Q'
 from Node import Node
 from Board import Board
 import time
+import math
 
 class MachinePlayer:
 
@@ -122,18 +123,20 @@ class MachinePlayer:
         self.move_list = []
 
 
-    def distance(p1,p2):
+    def distance(self, p1,p2):
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
     def utility(self, node):
         board = node.board
-        for col in range(board.get_width):
-            for row in range(board.get_width):
-                tile = board[row][col]
+        value = 0
+        for col in range(board.get_width()):
+            for row in range(board.get_width()):
+                data_board = board.get_board()
+                tile = data_board[row][col]
 
                 #green piece
                 if tile == 2:
-                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if data_board[goals[0]][goals[1]] != 2]
                     if node.player == 1:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
@@ -142,7 +145,7 @@ class MachinePlayer:
                 #red piece
                 elif tile == 1:
                     #elif red piece then create distance list for red
-                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if data_board[goals[0]][goals[1]] != 2]
                     if node.player == 2:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
@@ -174,10 +177,12 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
+        max_node = self.maxValue(node)
+
         data_board = node.get_board()
         data_board.changeTurn()
         print("Player Turn")
-        pass
+        return max_node
         # return the action to do from the state
 
 
@@ -215,19 +220,21 @@ class MachinePlayer:
                 board_copy.place_piece(player, move, legal_move)
                 # Create a new node that has that table
                 next_node = Node(next_player, board_copy, node.get_depth() - 1)
-
                 # value is equal to the max of the value and the minvalue of the next
                 # node and alpha and beta
-                value = max(value, self.minValue(next_node, alpha, beta))
-
+                child_node = self.minValue(next_node, alpha, beta)
+                value = max(value, child_node.get_value())
+                return_node = next_node
                 # if value is bigger than beta then return beta
                 if value > beta:
-                    return beta
+                    return_node.set_value(beta)
+                    return return_node
                 # alpha is equal to the max of alpha and the value
                 alpha = max(alpha, value)
 
         # return value
-        return value
+        return_node.set_value(value)
+        return return_node
 
 
     # Get the minimum value from some node
@@ -268,12 +275,16 @@ class MachinePlayer:
 
                 # value is equal to the minimum of the value and the maxvalue of
                 # the child node with the move made and alpha, beta
-                value = min(value, self.maxValue(next_node, alpha, beta))
+                child_node = self.maxValue(next_node, alpha, beta)
+                value = min(value, child_node.get_value())
+                return_node = next_node
                 # if value is less than alpha, return the value
                 if value < alpha:
-                    return value
+                    return_node.set_value(value)
+                    return return_node
                 # beta is equal to minimum(beta, value)
                 beta = min(beta, value)
 
         # return value
-        return value
+        return_node.set_value(value)
+        return return_node
