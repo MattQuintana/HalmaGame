@@ -17,6 +17,7 @@ class GameBoard(tk.Frame):
         self.photo2 = photo2
         self.tlimit = tlimit
         self.humanPlayer = hplayer
+        self.machinePlayer = MachinePlayer()
 
         # Holding where the latest tile moved from
         self.currentMoveCoords = ()
@@ -165,7 +166,7 @@ class GameBoard(tk.Frame):
         # Generating the coordinate of the tile that the user clicked
         coords = (counter1 - 1, counter2 - 1)
         # If a piece exists in the clicked tile and it is that color's turn...
-        if self.data_board.get_piece_at(coords[0], coords[1]) == self.turn:
+        if self.data_board.get_piece_at(coords[0], coords[1]) == self.humanTurn and self.turn == self.humanTurn:
             humanPlayer.piece_selected = self.data_board.get_piece_at(coords[0], coords[1])
             humanPlayer.selected_coords = (coords[0], coords[1])
             self.currentMoveCoords = (coords[0], coords[1])
@@ -214,20 +215,26 @@ class GameBoard(tk.Frame):
                     self.board.unbind("<Button-1>")
                     self.board.bind("<Button-1>", self.restartClick)
                 # Changing whose turn it is
-                if self.turn == 1:
-                    self.turn = 2
-                else:
-                    self.turn = 1
+                self.changeTurn()
                 humanPlayer.clear_move_list()
+                # Placeholder for alpha beta values
+                self.data_board = self.machinePlayer.minimax(self.data_board, 1, 1)
+                self.changeTurn()
+
         return coords
 
     def restartClick(self, event):
         self.data_board = Board(self.rows)
-        self.data_board.initRedPieces(int(self.rows / 2))
-        self.data_board.initGreenPieces(int(self.rows / 2))
+        self.data_board.initPieces(int(self.rows / 2))
         self.draw_pieces()
         self.board.unbind("<Button-1>")
         self.board.bind("<Button-1>", self.playerClick)
+
+    def changeTurn(self):
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
 
     # Populate the GUI with tiles at the appropriate locations
     def draw_pieces(self):
