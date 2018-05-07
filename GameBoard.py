@@ -1,5 +1,6 @@
 import tkinter as tk
 from Board import Board
+from Node import Node
 from MachinePlayer import MachinePlayer
 import sys, time
 
