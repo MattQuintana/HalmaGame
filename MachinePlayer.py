@@ -3,6 +3,7 @@ __author__ = 'Matt Q'
 from Node import Node
 from Board import Board
 import time
+import math
 
 class MachinePlayer:
 
@@ -122,7 +123,7 @@ class MachinePlayer:
         self.move_list = []
 
 
-    def distance(p1,p2):
+    def distance(self,p1,p2):
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
     def utility(self, node):
@@ -133,7 +134,7 @@ class MachinePlayer:
 
                 #green piece
                 if tile == 2:
-                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
                     if node.player == 1:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
@@ -142,7 +143,7 @@ class MachinePlayer:
                 #red piece
                 elif tile == 1:
                     #elif red piece then create distance list for red
-                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
                     if node.player == 2:
                         value += max(distanceList) if len(distanceList) else -100
                     else:
