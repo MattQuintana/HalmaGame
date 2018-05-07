@@ -114,5 +114,8 @@ class Board:
 
         return red_pos_list
 
-    def set_board(self, board):
-        self.board = board
+    # Create a new copy of a board passed in
+    def set_board(self, new_board):
+        # Using the copy operator avoids us working with the same
+        # board as before
+        self.board = new_board.copy()

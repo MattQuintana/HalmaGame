@@ -121,70 +121,109 @@ class MachinePlayer:
         self.move_list = []
 
 
-    '''
-     Minimax con alfa-beta
-     Pseudocode
-     Entrada: Nodo N, valores alfa y beta
-     Salida: Valor minimax de dicho nodo
-
-     Si N es nodo hoja entonce devlolver f(N)
-     sino
-       Si N es nodo MAX entonces
-           Para k = 1 hasta b hacer
-                alfa = max [alfa, Evaluation(N_k, alfa, beta)]
-                Si alfa >= beta then return beta ENDIF
-                IF k = b then return alfa ENDIF
-            END For loop
-        else
-            for k = 1 until b DO:
-                beta = minimum[beta, Evaluation(N_k, alfa, beta)]
-                if alfa >= beta then return alfa ENDIF
-                if k = b then return beta ENDIF
-            END FOR
-        ENDIF
-    ENDIF
-    '''
-
-    def alphaBetaSearch(self, node):
+    # Evaluate the board and give it a score
+    def evaluate(self, node):
         pass
-        
-    def minimax(self, node, alfa, beta):
-        # Get the data that we are working with out of the node
-        game_board_copy = Board()
-        game_board_copy.set_board(node.get_board())
 
-        win_detect = game_board_copy.detectWin()
+    #
+    def alphaBetaMinimax(self, node):
+        pass
+        # return the action to do from the state
+
+
+    # Get the maximum value from some node
+    def maxValue(self, node, alpha, beta):
+        # Get the data that we are working with out of the node
+        data_board = node.get_board()
+        win_detect = data_board.detectWin()
 
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
             pass
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
+        next_player = 0
 
         if player == 1:
-            player_positions = game_board_copy.get_red_positions()
+            player_positions = data_board.get_red_positions()
+            next_player = 2
         elif player == 2:
-            player_positions = game_board_copy.get_green_positions()
+            player_positions = data_board.get_green_positions()
+            next_player = 1
+
+        # value = -infinity
+        value = float("-inf")
+
+        # for every possible position that our player can move from
+        for move in player_positions:
+            legal_moves = self.generate_legal_moves(move[0], move[1], data_board.get_board())
+            # for evey move that can be made from that position
+            for legal_move in legal_moves:
+                board_copy = Board()
+                board_copy.set_board(data_board.get_board())
+                # Create a copy of the table that has that particular move made
+                board_copy.place_piece(player, move, legal_move)
+                # Create a new node that has that table
+                next_node = Node(next_player, board_copy, node.get_depth() - 1)
+
+                # value is equal to the max of the value and the minvalue of the next
+                # node and alpha and beta
+                value = max(value, self.minValue(next_node, alpha, beta))
+
+                # if value is bigger than beta then return beta
+                if value > beta:
+                    return beta
+                # alpha is equal to the max of alpha and the value
+                alpha = max(alpha, value)
+
+        # return value
+        return value
 
 
-        # if node type is max
-            # for every possible position that our player can move from
-                # for evey move that can be made from that position
-                    # Create a copy of the table that has that particular move made
-                    # Create a new node that has that table and set it to be a min node
-                    # alpha equals the max of alpha and minimax of the next node and our
-                    # current alpha and beta
+    # Get the minimum value from some node
+    def minValue(self, node, alpha, beta):
+        # Get the data that we are working with out of the node
+        data_board = node.get_board()
+        win_detect = data_board.detectWin()
 
-                    # if alpha is bigger than beta then return beta
-                    # if we've reached the end of all possible pieces, return alpha
+        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
+            pass
+            # return the evaluation function of the node since we have reached a leaf node
 
-        # else if node type is min
-            # for every possible position that our player can move from
-                # for every move that can be made from that position
-                    # Create a copy of the table that has that particular move made
-                    # Create a new node that has that table, set it to be a max node
-                    # Beta equals the minimum of Beta and the minimax of the next node
-                    # and our current alpha and beta
+        player = node.get_player()
+        next_player = 0
 
-                    # if alpha is bigger than beta then return alpha
-                    # if we've reached the end
+        if player == 1:
+            player_positions = data_board.get_red_positions()
+            next_player = 2
+        elif player == 2:
+            player_positions = data_board.get_green_positions()
+            next_player = 1
+
+
+        # value = infinity
+        value = float("inf")
+
+        # for every piece that a player can move
+        for move in player_positions:
+            legal_moves = self.generate_legal_moves(move[0], move[1], data_board)
+            # for every move that the piece can make
+            for legal_move in legal_moves:
+                board_copy = Board()
+                board_copy.set_board(data_board.get_board())
+                # Create a copy of the table that has that particular move made
+                board_copy.place_piece(player, move, legal_move)
+                # Create a new node that has that table
+                next_node = Node(next_player, board_copy, node.get_depth() - 1)
+
+                # value is equal to the minimum of the value and the maxvalue of
+                # the child node with the move made and alpha, beta
+                value = min(value, self.maxValue(next_node,alpha, beta))
+                # if value is less than alpha, return the value
+                if value < alpha:
+                    return value
+                # beta is equal to minimum(beta, value)
+                beta = min(beta, value)
+
+        # return value
+        return value

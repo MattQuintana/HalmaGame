@@ -2,7 +2,7 @@ __author__ = 'Matt Q'
 
 class Node:
 
-    def __init__(self, player, type, board, node_depth):
+    def __init__(self, player, board, node_depth):
         self.board = board
         self.type = type
         self.player = player
