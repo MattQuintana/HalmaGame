@@ -129,7 +129,8 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
-        node.changeTurn()
+        data_board = node.get_board()
+        data_board.changeTurn()
         print("Player Turn")
         pass
         # return the action to do from the state
