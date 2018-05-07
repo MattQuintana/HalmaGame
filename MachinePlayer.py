@@ -124,6 +124,21 @@ class MachinePlayer:
 
     # Evaluate the board and give it a score
     def evaluate(self, node):
+        # get the player that we are working with
+
+        # if the opponent has one give a high negative score
+        # if we have won, give a high positive score
+
+        # get the board and all of our player's pieces
+        # for every piece
+            # get it's distance from the goal camp
+            # add it to a sum total
+
+        # divide sum by number of pieces to get the average distance
+        # Lower the distance, the higher the evaluation
+        # Higher the distance, the lower the evaluation
+
+        # return the evaluation score
         pass
 
     #
