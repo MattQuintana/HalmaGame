@@ -129,7 +129,6 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
-        time.sleep(5)
         node.changeTurn()
         print("Player Turn")
         pass
