@@ -1,5 +1,6 @@
 import tkinter as tk
 from Board import Board
+from Node import Node
 from MachinePlayer import MachinePlayer
 from Node import Node
 import sys, time
@@ -273,7 +274,7 @@ class GameBoard(tk.Frame):
                                                     text="Your Move")
         else:
             self.playerMove = self.board.create_text(900, 100, font=("Purisa", 50), fill="Gold2",
-                                                     text="I'm Thinking...")
+                                                     text="AI Thinking")
 
 
 if __name__ == "__main__":
