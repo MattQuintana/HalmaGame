@@ -273,7 +273,7 @@ class GameBoard(tk.Frame):
                                                     text="Your Move")
         else:
             self.playerMove = self.board.create_text(900, 100, font=("Purisa", 50), fill="Gold2",
-                                                     text="I'm Thinking...")
+                                                     text="AI Thinking")
 
 
 if __name__ == "__main__":
