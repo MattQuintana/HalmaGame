@@ -127,6 +127,8 @@ class MachinePlayer:
 
     #
     def alphaBetaMinimax(self, node):
+        print("AI MOVE")
+        node.changeTurn()
         pass
         # return the action to do from the state
 
@@ -218,7 +220,7 @@ class MachinePlayer:
 
                 # value is equal to the minimum of the value and the maxvalue of
                 # the child node with the move made and alpha, beta
-                value = min(value, self.maxValue(next_node,alpha, beta))
+                value = min(value, self.maxValue(next_node, alpha, beta))
                 # if value is less than alpha, return the value
                 if value < alpha:
                     return value

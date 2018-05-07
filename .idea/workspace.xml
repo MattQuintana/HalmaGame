@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7167ed4-03a5-49ac-b357-f89c5186bb53" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Board.py" afterPath="$PROJECT_DIR$/Board.py" />
       <change beforePath="$PROJECT_DIR$/GameBoard.py" afterPath="$PROJECT_DIR$/GameBoard.py" />
+      <change beforePath="$PROJECT_DIR$/MachinePlayer.py" afterPath="$PROJECT_DIR$/MachinePlayer.py" />
     </list>
     <ignored path="HalmaGame.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,28 +48,28 @@
       <file leaf-file-name="Board.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Board.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
-              <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+            <state relative-caret-position="238">
+              <caret line="14" column="21" lean-forward="false" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MachinePlayer.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MachinePlayer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MachinePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="154" column="0" lean-forward="true" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
+            <state relative-caret-position="306">
+              <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GameBoard.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GameBoard.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GameBoard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="222" column="0" lean-forward="true" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+            <state relative-caret-position="338">
+              <caret line="215" column="44" lean-forward="false" selection-start-line="215" selection-start-column="44" selection-end-line="215" selection-end-column="44" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -101,6 +102,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>mp1</find>
+      <find>self.turn</find>
     </findStrings>
   </component>
   <component name="FindManager">
@@ -115,8 +117,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Board.py" />
-        <option value="$PROJECT_DIR$/GameBoard.py" />
         <option value="$PROJECT_DIR$/MachinePlayer.py" />
+        <option value="$PROJECT_DIR$/GameBoard.py" />
       </list>
     </option>
   </component>
@@ -826,29 +828,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GameBoard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="222" column="0" lean-forward="true" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Board.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+        <state relative-caret-position="238">
+          <caret line="14" column="21" lean-forward="false" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MachinePlayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="154" column="0" lean-forward="true" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
+        <state relative-caret-position="306">
+          <caret line="136" column="42" lean-forward="true" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameBoard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="215" column="44" lean-forward="false" selection-start-line="215" selection-start-column="44" selection-end-line="215" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

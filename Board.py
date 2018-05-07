@@ -12,12 +12,19 @@ class Board:
         self.size = size
         self.greenCorner = []
         self.redCorner = []
+        self.turn = 2
         # Initialize the board with all empty spaces
         for i in range(0, size):
             row = []
             for j in range(0, size):
                 row.append(self.EMPTY)
             self.board.append(row)
+
+    def changeTurn(self):
+        if self.turn == 1:
+            self.turn = 2
+        else:
+            self.turn = 1
 
     def detectWin(self):
         greenWin = False
