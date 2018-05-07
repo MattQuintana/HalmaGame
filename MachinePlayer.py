@@ -2,6 +2,7 @@ __author__ = 'Matt Q'
 
 from Node import Node
 from Board import Board
+import time
 
 class MachinePlayer:
 
@@ -128,7 +129,9 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
+        time.sleep(5)
         node.changeTurn()
+        print("Player Turn")
         pass
         # return the action to do from the state
 

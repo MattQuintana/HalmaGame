@@ -1,7 +1,7 @@
 import tkinter as tk
 from Board import Board
 from MachinePlayer import MachinePlayer
-import sys
+import sys, time
 
 
 class GameBoard(tk.Frame):
