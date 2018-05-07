@@ -121,26 +121,33 @@ class MachinePlayer:
     def clear_move_list(self):
         self.move_list = []
 
-        
+
     def distance(p1,p2):
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
-    def utility(self, board):
-        for col in range(b_length):
-            for row in range(b_length):
-                tile = self.board[row][col]
+    def utility(self, node):
+        board = node.board
+        for col in range(board.get_width):
+            for row in range(board.get_width):
+                tile = board[row][col]
 
-                #if green piece then create distance list for green
-                distanceList = [distance(x,y) for goals in green_goals if piece isnt green already]
-                value -= max(distanceList) if len(distanceList) else -100
+                #green piece
+                if tile == 2:
+                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    if node.player == 1:
+                        value += max(distanceList) if len(distanceList) else -100
+                    else:
+                        value -= max(distanceList) if len(distanceList) else -100
 
-                #elif red piece then create distance list for red
-                distanceList = [distance(x,y) for goals in red_goals if piece isnt red already]
-                value += max(distanceList) if len(distanceList) else -100
-
-      #possibly check to see if the tile has red piece and multiply value by negative 1 to switch signs
-
-      return value
+                #red piece
+                elif tile == 1:
+                    #elif red piece then create distance list for red
+                    distanceList = [distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
+                    if node.player == 2:
+                        value += max(distanceList) if len(distanceList) else -100
+                    else:
+                        value -= max(distanceList) if len(distanceList) else -100
+        return value
 
 
 
