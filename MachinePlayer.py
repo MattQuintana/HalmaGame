@@ -144,9 +144,9 @@ class MachinePlayer:
                     distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 1]
                     red += max(distanceList) if len(distanceList) else -
         if node.player == 1:
-            value = green/red
+            value = red/green
         else:
-            value = red / green
+            value = green/red
 
         return value
 
