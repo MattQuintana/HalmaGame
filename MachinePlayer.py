@@ -197,8 +197,9 @@ class MachinePlayer:
         print("Generated", self.boards, "boards.")
         self.prunes = 0
         self.boards = 0
+        data_board.chosenMove = best_move
         data_board.changeTurn()
-        return max_node
+        return max_node, best_move
         # return the action to do from the state
 
 

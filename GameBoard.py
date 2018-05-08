@@ -224,7 +224,7 @@ class GameBoard(tk.Frame):
                 copy_board.set_board(self.data_board.board)
 
                 root_node = Node(self.humanTurn, copy_board, 2) # Just a placeholder depth for now, this can be changed
-                return_node = self.machinePlayer.alphaBetaMinimax(root_node)
+                return_node, best_move = self.machinePlayer.alphaBetaMinimax(root_node)
                 self.data_board.changeTurn()
                 #self.data_board.move_piece(return_node.move[0], return_node.move[1])
 
@@ -232,6 +232,8 @@ class GameBoard(tk.Frame):
                 self.manualRefresh()
                 self.drawTurnStatus()
                 self.draw_pieces()
+                self.drawLatestMove(best_move[0], 'a')
+                self.drawLatestMove(best_move[1], 'b')
 
         return coords
 

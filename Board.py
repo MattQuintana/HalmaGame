@@ -23,6 +23,7 @@ class Board:
 
         self.getRedCorner(int(size/2))
         self.getGreenCorner(int(size/2))
+        self.chosenMove = 0
 
     def changeTurn(self):
         if self.turn == 1:
