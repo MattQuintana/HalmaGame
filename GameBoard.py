@@ -223,8 +223,9 @@ class GameBoard(tk.Frame):
                 copy_board = Board(8)
                 copy_board.set_board(self.data_board.board)
 
-                root_node = Node(self.humanTurn, copy_board, 1) # Just a placeholder depth for now, this can be changed
+                root_node = Node(self.humanTurn, copy_board, 4) # Just a placeholder depth for now, this can be changed
                 return_node = self.machinePlayer.alphaBetaMinimax(root_node)
+                self.data_board.changeTurn()
                 #self.data_board.move_piece(return_node.move[0], return_node.move[1])
 
                 self.board.delete("all")
