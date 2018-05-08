@@ -7,7 +7,7 @@ import math
 
 class MachinePlayer:
 
-    def __init__(self, timeLimit):
+    def __init__(self, timeLimit, alphaBeta):
         self.move_list = []
         self.piece_selected = 0
         self.selected_coords = ()
@@ -17,6 +17,7 @@ class MachinePlayer:
         self.end = 0
         self.prunes = 0
         self.boards = 0
+        self.alphaBeta = alphaBeta
 
     def move_generator(self, board, player):
         # get all of the pieces that belong to the player
@@ -250,7 +251,7 @@ class MachinePlayer:
 
                 return_node = next_node
                 # if value is bigger than beta then return beta
-                if value > beta:
+                if value > beta and self.alphaBeta:
                     self.prunes += 1
                     return_node.set_value(beta)
                     return return_node, None
@@ -320,7 +321,7 @@ class MachinePlayer:
                 value = min(value, child_node.get_value())
                 return_node = next_node
                 # if value is less than alpha, return the value
-                if value < alpha:
+                if value < alpha and self.alphaBeta:
                     self.prunes += 1
                     return_node.set_value(value)
                     return return_node, None
