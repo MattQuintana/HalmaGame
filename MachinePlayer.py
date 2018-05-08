@@ -179,6 +179,12 @@ class MachinePlayer:
         else:
             value = green/red
 
+        if winCheck[0]:
+            value = float("inf")
+        elif winCheck[1]:
+            value = float("inf")
+
+
         return value
 
     def alphaBetaMinimax(self, node):
