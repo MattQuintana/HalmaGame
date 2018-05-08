@@ -69,10 +69,20 @@ class GameBoard(tk.Frame):
 
         if hplayer == "green":
             self.humanTurn = 2
+            self.AITurn = 1
         elif hplayer == "red":
             self.humanTurn = 1
-            root_node = Node(2, self.data_board, 1) # Just a placeholder depth for now, this can be changed
-            #self.machinePlayer.alphaBetaMinimax(root_node)
+            self.AITurn = 2
+            root_node = Node(self.humanTurn, self.data_board, 1) # Just a placeholder depth for now, this can be changed
+            _, best_move = self.machinePlayer.alphaBetaMinimax(root_node)
+            self.data_board.changeTurn()
+            self.board.delete("all")
+            self.manualRefresh()
+            self.drawTurnStatus()
+            self.draw_pieces()
+            self.drawLatestMove(best_move[0], 'a')
+            self.drawLatestMove(best_move[1], 'b')
+            self.data_board.changeTurn()
 
     # Method to update the board when the window is resized
     def refresh(self, event):
