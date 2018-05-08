@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7167ed4-03a5-49ac-b357-f89c5186bb53" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Board.py" afterPath="$PROJECT_DIR$/Board.py" />
+      <change beforePath="$PROJECT_DIR$/GameBoard.py" afterPath="$PROJECT_DIR$/GameBoard.py" />
       <change beforePath="$PROJECT_DIR$/MachinePlayer.py" afterPath="$PROJECT_DIR$/MachinePlayer.py" />
     </list>
     <ignored path="HalmaGame.iws" />
@@ -45,8 +46,8 @@
       <file leaf-file-name="Board.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Board.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1190">
-              <caret line="70" column="38" lean-forward="true" selection-start-line="70" selection-start-column="38" selection-end-line="70" selection-end-column="38" />
+            <state relative-caret-position="-409">
+              <caret line="24" column="40" lean-forward="false" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
               <folding />
             </state>
           </provider>
@@ -55,8 +56,8 @@
       <file leaf-file-name="MachinePlayer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MachinePlayer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="213" column="39" lean-forward="false" selection-start-line="213" selection-start-column="39" selection-end-line="213" selection-end-column="39" />
+            <state relative-caret-position="221">
+              <caret line="271" column="17" lean-forward="false" selection-start-line="271" selection-start-column="17" selection-end-line="271" selection-end-column="17" />
               <folding>
                 <element signature="e#23#44#0" expanded="true" />
               </folding>
@@ -67,8 +68,8 @@
       <file leaf-file-name="GameBoard.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/GameBoard.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3740">
-              <caret line="225" column="62" lean-forward="false" selection-start-line="225" selection-start-column="62" selection-end-line="225" selection-end-column="62" />
+            <state relative-caret-position="1564">
+              <caret line="274" column="14" lean-forward="true" selection-start-line="274" selection-start-column="14" selection-end-line="274" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -113,10 +114,10 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/GameBoard.py" />
         <option value="$PROJECT_DIR$/workshop_space.py" />
         <option value="$PROJECT_DIR$/Node.py" />
         <option value="$PROJECT_DIR$/Board.py" />
+        <option value="$PROJECT_DIR$/GameBoard.py" />
         <option value="$PROJECT_DIR$/MachinePlayer.py" />
       </list>
     </option>
@@ -208,7 +209,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="HalmaGame" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/GameBoard.py" />
-      <option name="PARAMETERS" value="8 10 green" />
+      <option name="PARAMETERS" value="8 5 green" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -817,18 +818,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Board.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1190">
-          <caret line="70" column="38" lean-forward="true" selection-start-line="70" selection-start-column="38" selection-end-line="70" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/workshop_space.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="15" column="30" lean-forward="true" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/GameBoard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1564">
+          <caret line="274" column="14" lean-forward="true" selection-start-line="274" selection-start-column="14" selection-end-line="274" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -841,18 +842,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GameBoard.py">
+    <entry file="file://$PROJECT_DIR$/Board.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3740">
-          <caret line="225" column="62" lean-forward="false" selection-start-line="225" selection-start-column="62" selection-end-line="225" selection-end-column="62" />
+        <state relative-caret-position="-409">
+          <caret line="24" column="40" lean-forward="false" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MachinePlayer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="213" column="39" lean-forward="false" selection-start-line="213" selection-start-column="39" selection-end-line="213" selection-end-column="39" />
+        <state relative-caret-position="221">
+          <caret line="271" column="17" lean-forward="false" selection-start-line="271" selection-start-column="17" selection-end-line="271" selection-end-column="17" />
           <folding>
             <element signature="e#23#44#0" expanded="true" />
           </folding>
