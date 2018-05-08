@@ -155,6 +155,7 @@ class MachinePlayer:
 
     def utility(self, node):
         board = node.board
+        winCheck = board.detectWin()
         data_board = board.get_board()
         value = 0
         red = 0
@@ -183,7 +184,6 @@ class MachinePlayer:
             value = float("inf")
         elif winCheck[1]:
             value = float("inf")
-
 
         return value
 
