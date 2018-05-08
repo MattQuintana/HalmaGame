@@ -27,6 +27,7 @@ class MachinePlayer:
         col_offsets = [-1, 0, 1]
         jumps = []
 
+        gameboard = Board(len(board))
         # check adjacent squares for blocked positions
         for row_offset in row_offsets:
             for col_offset in col_offsets:
@@ -57,6 +58,15 @@ class MachinePlayer:
 
                     # if the space isn't filled, add it to the hops list
                     if (board[row + 2*row_offset][col+2*col_offset] == 0 and (row + 2*row_offset, col+2*col_offset) not in self.prevSpots):
+
+                        if (board[row][col] == 1 and (row, col) not in gameboard.redCorner):
+                            if ((row_jump_offset, col_jump_offset) in gameboard.redCorner):
+                                continue
+
+                        if (board[row][col] == 2 and (row, col) not in gameboard.greenCorner):
+                            if ((row_jump_offset, col_jump_offset) in gameboard.greenCorner):
+                                continue
+
                         self.prevSpots.append((row, col))
                         jumps.append((row + 2*row_offset, col + 2*col_offset))
                         # start a recursive hop search from that empty position
@@ -70,6 +80,7 @@ class MachinePlayer:
 
     # Generate all of the legals moves from some position on the board
     def generate_legal_moves(self, row, col, board):
+        gameboard = Board(len(board))
         # first check if there is a piece at that position to move
         if row >= len(board) or col >= len(board):
             print("That position is out of bounds.")
@@ -107,9 +118,20 @@ class MachinePlayer:
                 if (row + row_offset) < 0 or (col + col_offset) < 0:
                     continue
 
+
+
                 # Check if the position at the offset is filled
 
                 if (board[row + row_offset][col + col_offset] == 0):
+                    # make sure a piece can't move back to its own camp
+                    if (board[row][col] == 1 and (row, col) not in gameboard.redCorner):
+                        if ((row + row_offset, col + col_offset) in gameboard.redCorner):
+                            continue
+
+                    if (board[row][col] == 2 and (row, col) not in gameboard.greenCorner):
+                        if ((row + row_offset, col + col_offset) in gameboard.greenCorner):
+                            continue
+
                     legal_moves.append((row + row_offset, col + col_offset))
                 else:
                     blocked_spaces.append((row+row_offset, col + col_offset))
@@ -213,7 +235,6 @@ class MachinePlayer:
                     moveFrom = move
                     moveTo = legal_move
                 value = max(value, child_node.get_value())
-
 
                 return_node = next_node
                 # if value is bigger than beta then return beta
