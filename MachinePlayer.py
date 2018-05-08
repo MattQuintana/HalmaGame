@@ -15,6 +15,8 @@ class MachinePlayer:
         self.timeLimit = timeLimit
         self.start = 0
         self.end = 0
+        self.prunes = 0
+        self.boards = 0
 
     def move_generator(self, board, player):
         # get all of the pieces that belong to the player
@@ -161,6 +163,11 @@ class MachinePlayer:
         max_node, best_move = self.maxValue(node, float("-inf"), float("inf"))
         data_board = node.get_board()
         data_board.move_piece(best_move[0], best_move[1])
+        print("Took", self.end - self.start, "seconds to choose a move.")
+        print("Pruned", self.prunes, "branches.")
+        print("Generated", self.boards, "boards.")
+        self.prunes = 0
+        self.boards = 0
         data_board.changeTurn()
         return max_node
         # return the action to do from the state
@@ -173,10 +180,10 @@ class MachinePlayer:
         board = node.get_board()
         win_detect = board.detectWin()
         best_move = None
-        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() <= 0):
+        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() <= 0 or self.end - self.start > self.timeLimit):
             evaluation = self.utility(node)
             node.set_value(evaluation)
-            return node, None
+            return node, best_move
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
@@ -199,8 +206,9 @@ class MachinePlayer:
             # for evey move that can be made from that position
             for legal_move in legal_moves:
                 self.end = time.time()
-                #if(self.end-self.start > self.timeLimit):
-                #    return node, best_move
+                if(self.end-self.start > self.timeLimit):
+                    return node, best_move
+                self.boards += 1
                 board_copy = Board(node.get_board().get_height())
                 board_copy.set_board(data_board)
                 # Create a copy of the table that has that particular move made
@@ -212,16 +220,17 @@ class MachinePlayer:
                 # node and alpha and beta
                 child_node, _ = self.minValue(next_node, alpha, beta)
                 board_copy.move_piece(legal_move, move)
-                #print("MAX: ", child_node.get_value(), value)
                 if (value < child_node.get_value()):
                     moveFrom = move
                     moveTo = legal_move
+                    best_move = (moveFrom, moveTo)
                 value = max(value, child_node.get_value())
 
 
                 return_node = next_node
                 # if value is bigger than beta then return beta
                 if value > beta:
+                    self.prunes += 1
                     return_node.set_value(beta)
                     return return_node, None
 
@@ -229,7 +238,6 @@ class MachinePlayer:
                 alpha = max(alpha, value)
 
         # return value
-        best_move = (moveFrom, moveTo)
         return_node.set_value(value)
         return return_node, best_move
 
@@ -244,7 +252,7 @@ class MachinePlayer:
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() <= 0 or self.end - self.start > self.timeLimit):
             evaluation = self.utility(node)
             node.set_value(evaluation)
-            return node, None
+            return node, best_move
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
@@ -268,8 +276,9 @@ class MachinePlayer:
             # for every move that the piece can make
             for legal_move in legal_moves:
                 self.end = time.time()
-                #if (self.end - self.start > self.timeLimit):
-                #    return node, best_move
+                if (self.end - self.start > self.timeLimit):
+                    return node, best_move
+                self.boards += 1
                 board_copy = Board(node.get_board().get_height())
                 board_copy.set_board(data_board)
                 # Create a copy of the table that has that particular move made
@@ -283,20 +292,20 @@ class MachinePlayer:
                 # the child node with the move made and alpha, beta
                 child_node, _ = self.maxValue(next_node, alpha, beta)
                 board_copy.move_piece(legal_move, move)
-                #print("MIN: ", child_node.get_value(), value)
                 if (value > child_node.get_value()):
                     moveFrom = move
                     moveTo = legal_move
+                    best_move = (moveFrom, moveTo)
                 value = min(value, child_node.get_value())
                 return_node = next_node
                 # if value is less than alpha, return the value
                 if value < alpha:
+                    self.prunes += 1
                     return_node.set_value(value)
                     return return_node, None
                 # beta is equal to minimum(beta, value)
                 beta = min(beta, value)
 
         # return value
-        best_move = (moveFrom, moveTo)
         return_node.set_value(value)
         return return_node, best_move
