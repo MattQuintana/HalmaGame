@@ -19,7 +19,7 @@ class GameBoard(tk.Frame):
         self.photo2 = photo2
         self.tlimit = tlimit
         self.humanPlayer = hplayer
-        self.machinePlayer = MachinePlayer()
+        self.machinePlayer = MachinePlayer(tlimit)
 
         # Holding where the latest tile moved from
         self.currentMoveCoords = ()
@@ -223,7 +223,7 @@ class GameBoard(tk.Frame):
                 copy_board = Board(8)
                 copy_board.set_board(self.data_board.board)
 
-                root_node = Node(self.humanTurn, copy_board, 1) # Just a placeholder depth for now, this can be changed
+                root_node = Node(self.humanTurn, copy_board, 50) # Just a placeholder depth for now, this can be changed
                 return_node = self.machinePlayer.alphaBetaMinimax(root_node)
                 self.data_board.changeTurn()
                 #self.data_board.move_piece(return_node.move[0], return_node.move[1])
@@ -299,7 +299,7 @@ if __name__ == "__main__":
     p2 = p2.zoom(25)
     p2 = p2.subsample(100)
 
-    humanPlayer = MachinePlayer()
+    humanPlayer = MachinePlayer(sys.argv[2])
 
     bsize = int(sys.argv[1])
     timeLimit = int(sys.argv[2])

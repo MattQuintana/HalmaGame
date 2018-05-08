@@ -12,6 +12,7 @@ class Board:
         self.size = size
         self.greenCorner = []
         self.redCorner = []
+
         self.turn = 2
         # Initialize the board with all empty spaces
         for i in range(0, size):
