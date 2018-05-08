@@ -223,7 +223,7 @@ class GameBoard(tk.Frame):
                 copy_board = Board(8)
                 copy_board.set_board(self.data_board.board)
 
-                root_node = Node(self.humanTurn, copy_board, 4) # Just a placeholder depth for now, this can be changed
+                root_node = Node(self.humanTurn, copy_board, 1) # Just a placeholder depth for now, this can be changed
                 return_node = self.machinePlayer.alphaBetaMinimax(root_node)
                 self.data_board.changeTurn()
                 #self.data_board.move_piece(return_node.move[0], return_node.move[1])
@@ -279,7 +279,7 @@ class GameBoard(tk.Frame):
         self.board.coords(name, x0, y0)
 
     def drawTurnStatus(self):
-        if self.data_board.turn != self.humanTurn:
+        if self.data_board.turn == self.humanTurn:
             self.playerMove = self.board.create_text(900, 100, font=("Purisa", 50), fill="Gold2",
                                                     text="Your Move")
         else:

@@ -122,8 +122,6 @@ class MachinePlayer:
     def clear_move_list(self):
         self.move_list = []
 
-
-
     def distance(self,p1,p2):
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
@@ -147,6 +145,7 @@ class MachinePlayer:
                     #elif red piece then create distance list for red
                     distanceList = [self.distance((row,col),goals) for goals in board.greenCorner if data_board[goals[0]][goals[1]] != 1]
                     red += max(distanceList) if len(distanceList) else - 100
+
         if node.player == 1:
             value = red/green
         else:
@@ -154,29 +153,6 @@ class MachinePlayer:
 
         return value
 
-
-
-    # Evaluate the board and give it a score
-    def evaluate(self, node):
-
-        # get the player that we are working with
-
-        # if the opponent has one give a high negative score
-        # if we have won, give a high positive score
-
-        # get the board and all of our player's pieces
-        # for every piece
-            # get it's distance from the goal camp
-            # add it to a sum total
-
-        # divide sum by number of pieces to get the average distance
-        # Lower the distance, the higher the evaluation
-        # Higher the distance, the lower the evaluation
-
-        # return the evaluation score
-        pass
-
-    #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
         max_node, best_move = self.maxValue(node, float("-inf"), float("inf"))
@@ -191,11 +167,12 @@ class MachinePlayer:
 
     # Get the maximum value from some node
     def maxValue(self, node, alpha, beta):
+        print("MIX")
         # Get the data that we are working with out of the node
         board = node.get_board()
         win_detect = board.detectWin()
-
-        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
+        best_move = None
+        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() <= 0):
             evaluation = self.utility(node)
             node.set_value(evaluation)
             return node, None
@@ -227,21 +204,27 @@ class MachinePlayer:
                 # Create a new node that has that table
                 next_node = Node(player, board_copy, node.get_depth() - 1)
                 next_node.move = (move, legal_move)
-                best_move = (move, legal_move)
                 # value is equal to the max of the value and the minvalue of the next
                 # node and alpha and beta
                 child_node, _ = self.minValue(next_node, alpha, beta)
                 board_copy.move_piece(legal_move, move)
+                #print("MAX: ", child_node.get_value(), value)
                 value = max(value, child_node.get_value())
+
+                if (value > child_node.get_value()):
+                    moveFrom = move
+                    moveTo = legal_move
                 return_node = next_node
                 # if value is bigger than beta then return beta
                 if value > beta:
                     return_node.set_value(beta)
-                    return return_node, best_move
+                    return return_node, None
+
                 # alpha is equal to the max of alpha and the value
                 alpha = max(alpha, value)
 
         # return value
+        best_move = (moveFrom, moveTo)
         return_node.set_value(value)
         return return_node, best_move
 
@@ -249,11 +232,13 @@ class MachinePlayer:
     # Get the minimum value from some node
     def minValue(self, node, alpha, beta):
         # Get the data that we are working with out of the node
+        print("MIN")
         board = node.get_board()
         win_detect = board.detectWin()
-
-        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
+        best_move = None
+        if (win_detect[0] == True or win_detect[1] == True or node.get_depth() <= 0):
             evaluation = self.utility(node)
+            print(evaluation)
             node.set_value(evaluation)
             return node, None
             # return the evaluation function of the node since we have reached a leaf node
@@ -285,21 +270,26 @@ class MachinePlayer:
                 # Create a new node that has that table
                 next_node = Node(player, board_copy, node.get_depth() - 1)
                 next_node.move = (move, legal_move)
-                best_move = (move, legal_move)
+
 
                 # value is equal to the minimum of the value and the maxvalue of
                 # the child node with the move made and alpha, beta
                 child_node, _ = self.maxValue(next_node, alpha, beta)
                 board_copy.move_piece(legal_move, move)
+                #print("MIN: ", child_node.get_value(), value)
                 value = min(value, child_node.get_value())
+                if (value < child_node.get_value()):
+                    moveFrom = move
+                    moveTo = legal_move
                 return_node = next_node
                 # if value is less than alpha, return the value
                 if value < alpha:
                     return_node.set_value(value)
-                    return return_node, best_move
+                    return return_node, None
                 # beta is equal to minimum(beta, value)
                 beta = min(beta, value)
 
         # return value
+        best_move = (moveFrom, moveTo)
         return_node.set_value(value)
         return return_node, best_move

@@ -8,13 +8,17 @@ import time
 
 
 def main():
-    a_list = [[1,2,[1,2,3],3,4],[2,3,4,54]]
-    print(a_list)
-    b_list = a_list.copy()
-    print(b_list)
-    a_list.append(36)
-    print(a_list)
-    print(b_list)
+    mp1 = MachinePlayer()
+    myBoard = Board(8)
+    myNode = Node(2, myBoard, 2)
+    myBoard.initPieces(4)
+    myBoard.print_board()
+    print(mp1.utility(myNode))
+
+    myBoard.move_piece((0,0), (2, 2))
+    myNode = Node(2, myBoard, 2)
+    myBoard.print_board()
+    print(mp1.utility(myNode))
 
 
 

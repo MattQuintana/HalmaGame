@@ -20,6 +20,9 @@ class Board:
                 row.append(self.EMPTY)
             self.board.append(row)
 
+        self.getRedCorner(int(size/2))
+        self.getGreenCorner(int(size/2))
+
     def changeTurn(self):
         if self.turn == 1:
             self.turn = 2
@@ -57,12 +60,23 @@ class Board:
         for i in range(0, size):
             for j in range(0, size-i):
                 self.place_piece(self.RED, i, j)
-                self.redCorner.append((i, j))
             cur_row = (size * 2) - (size - i)
             start_col = size * 2 - 1 - i
             end_col = size * 2
             for col in range(start_col, end_col):
                 self.place_piece(self.GREEN, cur_row, col)
+
+    def getRedCorner(self, size):
+        for i in range(0, size):
+            for j in range(0, size-i):
+                self.redCorner.append((i, j))
+
+    def getGreenCorner(self, size):
+        for i in range(0, size):
+            cur_row = (size * 2) - (size - i)
+            start_col = size * 2 - 1 - i
+            end_col = size * 2
+            for col in range(start_col, end_col):
                 self.greenCorner.append((cur_row, col))
 
     def initGreenPieces(self, size):
