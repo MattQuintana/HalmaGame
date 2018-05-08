@@ -179,9 +179,10 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
-        max_node = self.maxValue(node, float("-inf"), float("inf"))
+        max_node, best_move = self.maxValue(node, float("-inf"), float("inf"))
 
         data_board = node.get_board()
+        data_board.move_piece(best_move[0], best_move[1])
         data_board.changeTurn()
         print("Player Turn")
         return max_node
@@ -197,16 +198,16 @@ class MachinePlayer:
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
             evaluation = self.utility(node)
             node.set_value(evaluation)
-            return node
+            return node, None
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
         next_player = player
 
         if player == 1:
-            player_positions = board.get_red_positions()
-        elif player == 2:
             player_positions = board.get_green_positions()
+        elif player == 2:
+            player_positions = board.get_red_positions()
 
         # value = -infinity
         value = float("-inf")
@@ -226,21 +227,23 @@ class MachinePlayer:
                 # Create a new node that has that table
                 next_node = Node(player, board_copy, node.get_depth() - 1)
                 next_node.move = (move, legal_move)
+                best_move = (move, legal_move)
                 # value is equal to the max of the value and the minvalue of the next
                 # node and alpha and beta
-                child_node = self.minValue(next_node, alpha, beta)
+                child_node, _ = self.minValue(next_node, alpha, beta)
+                board_copy.move_piece(legal_move, move)
                 value = max(value, child_node.get_value())
                 return_node = next_node
                 # if value is bigger than beta then return beta
                 if value > beta:
                     return_node.set_value(beta)
-                    return return_node
+                    return return_node, best_move
                 # alpha is equal to the max of alpha and the value
                 alpha = max(alpha, value)
 
         # return value
         return_node.set_value(value)
-        return return_node
+        return return_node, best_move
 
 
     # Get the minimum value from some node
@@ -252,15 +255,15 @@ class MachinePlayer:
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
             evaluation = self.utility(node)
             node.set_value(evaluation)
-            return node
+            return node, None
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
 
         if player == 1:
-            player_positions = board.get_red_positions()
-        elif player == 2:
             player_positions = board.get_green_positions()
+        elif player == 2:
+            player_positions = board.get_red_positions()
 
 
         # value = infinity
@@ -282,19 +285,21 @@ class MachinePlayer:
                 # Create a new node that has that table
                 next_node = Node(player, board_copy, node.get_depth() - 1)
                 next_node.move = (move, legal_move)
+                best_move = (move, legal_move)
 
                 # value is equal to the minimum of the value and the maxvalue of
                 # the child node with the move made and alpha, beta
-                child_node = self.maxValue(next_node, alpha, beta)
+                child_node, _ = self.maxValue(next_node, alpha, beta)
+                board_copy.move_piece(legal_move, move)
                 value = min(value, child_node.get_value())
                 return_node = next_node
                 # if value is less than alpha, return the value
                 if value < alpha:
                     return_node.set_value(value)
-                    return return_node
+                    return return_node, best_move
                 # beta is equal to minimum(beta, value)
                 beta = min(beta, value)
 
         # return value
         return_node.set_value(value)
-        return return_node
+        return return_node, best_move
