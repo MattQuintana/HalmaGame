@@ -209,11 +209,12 @@ class MachinePlayer:
                 child_node, _ = self.minValue(next_node, alpha, beta)
                 board_copy.move_piece(legal_move, move)
                 #print("MAX: ", child_node.get_value(), value)
-                value = max(value, child_node.get_value())
-
-                if (value > child_node.get_value()):
+                if (value < child_node.get_value()):
                     moveFrom = move
                     moveTo = legal_move
+                value = max(value, child_node.get_value())
+
+
                 return_node = next_node
                 # if value is bigger than beta then return beta
                 if value > beta:
@@ -278,7 +279,7 @@ class MachinePlayer:
                 board_copy.move_piece(legal_move, move)
                 #print("MIN: ", child_node.get_value(), value)
                 value = min(value, child_node.get_value())
-                if (value < child_node.get_value()):
+                if (value > child_node.get_value()):
                     moveFrom = move
                     moveTo = legal_move
                 return_node = next_node
