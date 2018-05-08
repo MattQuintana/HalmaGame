@@ -9,6 +9,7 @@ class Node:
         self.to_explore = True
         self.node_value = 0
         self.node_depth = node_depth
+        self.move = 0
 
         self.children = []
 

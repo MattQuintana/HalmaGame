@@ -72,7 +72,7 @@ class GameBoard(tk.Frame):
         elif hplayer == "red":
             self.humanTurn = 1
             root_node = Node(2, self.data_board, 1) # Just a placeholder depth for now, this can be changed
-            self.machinePlayer.alphaBetaMinimax(root_node)
+            #self.machinePlayer.alphaBetaMinimax(root_node)
 
     # Method to update the board when the window is resized
     def refresh(self, event):
@@ -220,8 +220,17 @@ class GameBoard(tk.Frame):
                 self.data_board.changeTurn()
                 humanPlayer.clear_move_list()
                 # Placeholder for alpha beta values
-                root_node = Node(2, self.data_board, 1) # Just a placeholder depth for now, this can be changed
-                self.machinePlayer.alphaBetaMinimax(root_node)
+                copy_board = Board(8)
+                copy_board.set_board(self.data_board.board)
+
+                root_node = Node(self.humanTurn, copy_board, 4) # Just a placeholder depth for now, this can be changed
+                return_node = self.machinePlayer.alphaBetaMinimax(root_node)
+                #self.data_board.move_piece(return_node.move[0], return_node.move[1])
+
+                self.board.delete("all")
+                self.manualRefresh()
+                self.drawTurnStatus()
+                self.draw_pieces()
 
         return coords
 

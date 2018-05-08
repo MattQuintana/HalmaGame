@@ -123,58 +123,35 @@ class MachinePlayer:
         self.move_list = []
 
 
-<<<<<<< HEAD
-    def distance(self, p1,p2):
-=======
+
     def distance(self,p1,p2):
->>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
         return math.sqrt((p2[0]-p1[0])**2 + (p2[1]-p1[1])**2)
 
     def utility(self, node):
         board = node.board
+        data_board = board.get_board()
         value = 0
-<<<<<<< HEAD
+        red = 0
+        green = 0
         for col in range(board.get_width()):
             for row in range(board.get_width()):
-                data_board = board.get_board()
                 tile = data_board[row][col]
 
                 #green piece
                 if tile == 2:
                     distanceList = [self.distance((row,col),goals) for goals in board.redCorner if data_board[goals[0]][goals[1]] != 2]
-                    if node.player == 1:
-                        value += max(distanceList) if len(distanceList) else -100
-                    else:
-                        value -= max(distanceList) if len(distanceList) else -100
-=======
-        for col in range(board.get_width):
-            for row in range(board.get_width):
-                tile = board[row][col]
-
-                #green piece
-                if tile == 2:
-                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 2]
                     green += max(distanceList) if len(distanceList) else -100
->>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
 
                 #red piece
                 elif tile == 1:
                     #elif red piece then create distance list for red
-<<<<<<< HEAD
-                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if data_board[goals[0]][goals[1]] != 2]
-                    if node.player == 2:
-                        value += max(distanceList) if len(distanceList) else -100
-                    else:
-                        value -= max(distanceList) if len(distanceList) else -100
-=======
-                    distanceList = [self.distance((row,col),goals) for goals in board.redCorner if board[goals[0]][goals[1]] != 1]
-                    red += max(distanceList) if len(distanceList) else -
+                    distanceList = [self.distance((row,col),goals) for goals in board.greenCorner if data_board[goals[0]][goals[1]] != 1]
+                    red += max(distanceList) if len(distanceList) else - 100
         if node.player == 1:
             value = red/green
         else:
             value = green/red
 
->>>>>>> 8477d0cb0af451f3881df133d01f86ca4fa52ee3
         return value
 
 
@@ -202,7 +179,7 @@ class MachinePlayer:
     #
     def alphaBetaMinimax(self, node):
         print("AI MOVE")
-        max_node = self.maxValue(node)
+        max_node = self.maxValue(node, float("-inf"), float("inf"))
 
         data_board = node.get_board()
         data_board.changeTurn()
@@ -214,37 +191,41 @@ class MachinePlayer:
     # Get the maximum value from some node
     def maxValue(self, node, alpha, beta):
         # Get the data that we are working with out of the node
-        data_board = node.get_board()
-        win_detect = data_board.detectWin()
+        board = node.get_board()
+        win_detect = board.detectWin()
 
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
-            pass
+            evaluation = self.utility(node)
+            node.set_value(evaluation)
+            return node
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
-        next_player = 0
+        next_player = player
 
         if player == 1:
-            player_positions = data_board.get_red_positions()
-            next_player = 2
+            player_positions = board.get_red_positions()
         elif player == 2:
-            player_positions = data_board.get_green_positions()
-            next_player = 1
+            player_positions = board.get_green_positions()
 
         # value = -infinity
         value = float("-inf")
-
+        data_board = board.get_board()
         # for every possible position that our player can move from
         for move in player_positions:
-            legal_moves = self.generate_legal_moves(move[0], move[1], data_board.get_board())
+            legal_moves = self.generate_legal_moves(move[0], move[1], data_board)
+            if len(legal_moves) == 0:
+                continue
+
             # for evey move that can be made from that position
             for legal_move in legal_moves:
-                board_copy = Board()
-                board_copy.set_board(data_board.get_board())
+                board_copy = Board(node.get_board().get_height())
+                board_copy.set_board(data_board)
                 # Create a copy of the table that has that particular move made
-                board_copy.place_piece(player, move, legal_move)
+                board_copy.move_piece(move, legal_move)
                 # Create a new node that has that table
-                next_node = Node(next_player, board_copy, node.get_depth() - 1)
+                next_node = Node(player, board_copy, node.get_depth() - 1)
+                next_node.move = (move, legal_move)
                 # value is equal to the max of the value and the minvalue of the next
                 # node and alpha and beta
                 child_node = self.minValue(next_node, alpha, beta)
@@ -265,38 +246,42 @@ class MachinePlayer:
     # Get the minimum value from some node
     def minValue(self, node, alpha, beta):
         # Get the data that we are working with out of the node
-        data_board = node.get_board()
-        win_detect = data_board.detectWin()
+        board = node.get_board()
+        win_detect = board.detectWin()
 
         if (win_detect[0] == True or win_detect[1] == True or node.get_depth() == 0):
-            pass
+            evaluation = self.utility(node)
+            node.set_value(evaluation)
+            return node
             # return the evaluation function of the node since we have reached a leaf node
 
         player = node.get_player()
-        next_player = 0
 
         if player == 1:
-            player_positions = data_board.get_red_positions()
-            next_player = 2
+            player_positions = board.get_red_positions()
         elif player == 2:
-            player_positions = data_board.get_green_positions()
-            next_player = 1
+            player_positions = board.get_green_positions()
 
 
         # value = infinity
         value = float("inf")
 
+        data_board = board.get_board()
+
         # for every piece that a player can move
         for move in player_positions:
             legal_moves = self.generate_legal_moves(move[0], move[1], data_board)
+            if len(legal_moves) == 0:
+                continue
             # for every move that the piece can make
             for legal_move in legal_moves:
-                board_copy = Board()
-                board_copy.set_board(data_board.get_board())
+                board_copy = Board(node.get_board().get_height())
+                board_copy.set_board(data_board)
                 # Create a copy of the table that has that particular move made
-                board_copy.place_piece(player, move, legal_move)
+                board_copy.move_piece(move, legal_move)
                 # Create a new node that has that table
-                next_node = Node(next_player, board_copy, node.get_depth() - 1)
+                next_node = Node(player, board_copy, node.get_depth() - 1)
+                next_node.move = (move, legal_move)
 
                 # value is equal to the minimum of the value and the maxvalue of
                 # the child node with the move made and alpha, beta
